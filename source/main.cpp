@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
 
 int main() {
     if (!glfwInit()) {
@@ -25,6 +26,13 @@ int main() {
         glfwTerminate();
         return -1;
     }
+
+    // Remember: counter clockwise for vertices connection order
+    std::vector<float> vertices {
+        0.f, 0.5f, 0.f,
+        -0.5f, -0.5f, 0.f,
+        0.5f, -0.5f, 0.f
+    };
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(1.f, 0.f, 0.f, 1.f);
