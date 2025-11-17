@@ -57,9 +57,13 @@ int main() {
     std::string vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec3 position;
+        layout (location = 1) in vec3 color;
+
+        out vec3 vColor;
 
         void main()
         {
+            vColor = color;
             gl_Position = vec4(position.x, position.y, position.z, 1.0);
         }
     )";
@@ -81,9 +85,12 @@ int main() {
         #version 330 core
         out vec4 FragColor;
 
+        in vec3 vColor;
+        uniform vec4 uColor;
+
         void main()
         {
-            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            FragColor = vec4(vColor, 1.0) * uColor;
         }
     )";
 
@@ -115,12 +122,17 @@ int main() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-
     // Remember: counter clockwise for vertices connection order
     std::vector<float> vertices {
-        0.f, 0.5f, 0.f,
-        -0.5f, -0.5f, 0.f,
-        0.5f, -0.5f, 0.f
+        0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f,
+        -0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f,
+        -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f,
+        0.5f, -0.5f, 0.f, 1.f, 1.f, 0.f
+    };
+
+    std::vector<unsigned int> indices {
+        0, 1, 2,
+        0, 2, 3
     };
 
     GLuint vbo;
@@ -130,28 +142,37 @@ int main() {
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    GLint uColorLoc = glGetUniformLocation(shaderProgram, "uColor");
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(1.f, 1.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // 1. Activate shader program
         glUseProgram(shaderProgram);
-        // 2. Bind our vao containning our vertex data layout
+        glUniform4f(uColorLoc, 0.f, 1.f, 0.f, 1.f);
         glBindVertexArray(vao);
-        // 3. To render our triangle.
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
