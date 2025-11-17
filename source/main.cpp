@@ -4,6 +4,38 @@
 #include <vector>
 #include <string>
 
+struct Vec2 {
+    float x{0.f};
+    float y{0.f};
+};
+
+Vec2 offset;
+
+void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mode) {
+    if (action == GLFW_PRESS) {
+        switch(key) {
+            case GLFW_KEY_UP:
+                offset.y += 0.01f;
+                std::cout << "GLFW_KEY_UP" << std::endl;
+            break;
+            case GLFW_KEY_DOWN:
+                offset.y -= 0.01f;
+                std::cout << "GLFW_KEY_DOWN" << std::endl;
+            break;
+            case GLFW_KEY_RIGHT:
+                offset.x += 0.01f;
+                std::cout << "GLFW_KEY_RIGHT" << std::endl;
+            break;
+            case GLFW_KEY_LEFT:
+                offset.x -= 0.01f;
+                std::cout << "GLFW_KEY_LEFT" << std::endl;
+            break;
+            default:
+            break;
+        }
+    }
+}
+
 int main() {
     if (!glfwInit()) {
         return -1;
@@ -19,6 +51,8 @@ int main() {
         glfwTerminate();
         return -1;
     }
+
+    glfwSetKeyCallback(window, keyCallback);
 
     glfwSetWindowPos(window, 750, 150);
     glfwMakeContextCurrent(window);
@@ -59,12 +93,14 @@ int main() {
         layout (location = 0) in vec3 position;
         layout (location = 1) in vec3 color;
 
+        uniform vec2 uOffset;
+
         out vec3 vColor;
 
         void main()
         {
             vColor = color;
-            gl_Position = vec4(position.x, position.y, position.z, 1.0);
+            gl_Position = vec4(position.x + uOffset.x, position.y + uOffset.y, position.z, 1.0);
         }
     )";
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -164,6 +200,7 @@ int main() {
     glBindVertexArray(0);
 
     GLint uColorLoc = glGetUniformLocation(shaderProgram, "uColor");
+    GLuint uOffsetLoc = glGetUniformLocation(shaderProgram, "uOffset");
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(1.f, 1.f, 0.f, 1.f);
@@ -171,6 +208,7 @@ int main() {
 
         glUseProgram(shaderProgram);
         glUniform4f(uColorLoc, 0.f, 1.f, 0.f, 1.f);
+        glUniform2f(uOffsetLoc, offset.x, offset.y);
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
