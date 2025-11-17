@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <vector>
+#include <string>
 
 int main() {
     if (!glfwInit()) {
@@ -26,6 +27,31 @@ int main() {
         glfwTerminate();
         return -1;
     }
+
+    // Vertex Data -> Vertex Shader -> Primitive Assembly -> Rasterization -> Fragment shader -> Testing & blending -> Screen buffer
+    
+    // **** Programable stages were we have the most control
+
+    // - Vertex Shader ****
+    // A program that runs in the GPU (receives a group of points / vertices from the screen space)
+    // Forming the shape of an object or mesh.
+
+    // - Primitive Assembly
+    // Vertices are assembled into complete triangles.
+
+    // - Rasterization
+    // Takes the primities and fill the area with pixels called fragments. The output is
+    // a ollection of fragments that covers the area of the shape.
+
+    // - Fragment Shader ****
+    // Another GPU program. It works with individual fragments. Determines the color of each
+    // pixel, so it helps to color different parts of an object.
+
+    // - Testing & Blending
+    // This ensures that new pixels are correctly combined with what was already in the frame
+    // buffer.
+
+    // And once its done the result is displayed in the screen buffer.
 
     // Remember: counter clockwise for vertices connection order
     std::vector<float> vertices {
