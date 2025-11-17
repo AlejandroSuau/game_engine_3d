@@ -53,6 +53,69 @@ int main() {
 
     // And once its done the result is displayed in the screen buffer.
 
+    // Declares a vertex input in location 0. 3d vector for each vertex pos
+    std::string vertexShaderSource = R"(
+        #version 330 core
+        layout (location = 0) in vec3 position;
+
+        void main()
+        {
+            gl_Position = vec4(position.x, position.y, position.z, 1.0);
+        }
+    )";
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    const char* vertexShaderCStr = vertexShaderSource.c_str();
+    glShaderSource(vertexShader, 1, &vertexShaderCStr, nullptr);
+    glCompileShader(vertexShader);
+
+    GLint success;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+        std::cerr << "ERROR: VERTEX_SHADER_COMPILATION_FAILED: " << infoLog << std::endl;
+    }
+
+    // output value from the shader
+    std::string fragmentShaderSource = R"(
+        #version 330 core
+        out vec4 fragColor;
+
+        void main()
+        {
+            fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+    )";
+
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const char* fragmentShaderSourceCstr = fragmentShaderSource.c_str();
+    glShaderSource(fragmentShader, 1, &fragmentShaderSourceCstr, nullptr);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+        std::cerr << "ERROR: FRAGMENT_SHADER_COMPILATION_FAILED: " << infoLog << std::endl;
+    }
+
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        std::cerr << "ERROR: SHADER_PROGRAM_LINKING_FAILED: " << infoLog << std::endl;
+    }
+
+    // Once linked, we don't need the program in the gpu so we can free memory.
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+
     // Remember: counter clockwise for vertices connection order
     std::vector<float> vertices {
         0.f, 0.5f, 0.f,
