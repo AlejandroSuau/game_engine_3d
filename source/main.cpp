@@ -79,11 +79,11 @@ int main() {
     // output value from the shader
     std::string fragmentShaderSource = R"(
         #version 330 core
-        out vec4 fragColor;
+        out vec4 FragColor;
 
         void main()
         {
-            fragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
         }
     )";
 
@@ -123,12 +123,37 @@ int main() {
         0.5f, -0.5f, 0.f
     };
 
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    // From system to gpu memory
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
     while (!glfwWindowShouldClose(window)) {
-        glClearColor(1.f, 0.f, 0.f, 1.f);
+        glClearColor(1.f, 1.f, 0.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glfwSwapBuffers(window);
+        // 1. Activate shader program
+        glUseProgram(shaderProgram);
+        // 2. Bind our vao containning our vertex data layout
+        glBindVertexArray(vao);
+        // 3. To render our triangle.
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
+
+        glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
