@@ -60,7 +60,7 @@ std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(
 }
 
 void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram) {
-    
+    shaderProgram->Bind();
 }
 
 }
