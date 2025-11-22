@@ -9,6 +9,8 @@ set(PROJECT_SOURCE_FILES
     source/Application.cpp
     source/input/InputManager.hpp
     source/input/InputManager.cpp
+    source/graphics/Graphics.hpp
+    source/graphics/Graphics.cpp
 )
 
 include_directories(source)
