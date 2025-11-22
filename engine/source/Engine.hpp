@@ -1,6 +1,7 @@
 #pragma once
 
 #include "input/InputManager.hpp"
+#include "graphics/GraphicsAPI.hpp"
 
 #include <memory>
 #include <chrono>
@@ -21,6 +22,7 @@ public:
     void SetApplication(Application* app);
     Application* GetApplication();
     InputManager& GetInputManager();
+    GraphicsAPI& GetGraphicsAPI();
 
 private:
     Engine() = default;
@@ -33,6 +35,7 @@ private:
     std::chrono::steady_clock::time_point m_lastTimePoint;
     GLFWwindow* m_window = nullptr;
     InputManager m_inputManager;
+    GraphicsAPI m_graphicsAPI;
 };
 
 }
