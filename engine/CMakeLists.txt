@@ -13,8 +13,11 @@ set(PROJECT_SOURCE_FILES
     source/graphics/ShaderProgram.cpp
     source/graphics/GraphicsAPI.hpp
     source/graphics/GraphicsAPI.cpp
+    source/graphics/VertexLayout.hpp
     source/render/Material.hpp
     source/render/Material.cpp
+    source/render/Mesh.hpp
+    source/render/Mesh.cpp
 )
 
 include_directories(source)
