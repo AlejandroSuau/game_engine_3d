@@ -1,5 +1,7 @@
 #include "graphics/GraphicsAPI.hpp"
+
 #include "graphics/ShaderProgram.hpp"
+#include "render/Material.hpp"
 
 #include <iostream>
 
@@ -60,7 +62,19 @@ std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(
 }
 
 void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram) {
+    if (!shaderProgram) {
+        return;
+    }
+
     shaderProgram->Bind();
+}
+
+void GraphicsAPI::BindMaterial(Material* material) {
+    if (!material) {
+        return;
+    }
+
+    material->Bind();
 }
 
 }
