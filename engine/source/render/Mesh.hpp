@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include "graphics/VertexLayout.hpp"
 
@@ -14,7 +14,7 @@ public:
         const std::vector<uint32_t>& indices);
     Mesh(VertexLayout layout, 
         const std::vector<float>& vertices);
-        
+
     Mesh(const Mesh&) = delete;
     Mesh& operator=(const Mesh&) = delete;
 

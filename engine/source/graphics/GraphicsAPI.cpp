@@ -2,6 +2,7 @@
 
 #include "graphics/ShaderProgram.hpp"
 #include "render/Material.hpp"
+#include "render/Mesh.hpp"
 
 #include <iostream>
 
@@ -75,6 +76,18 @@ void GraphicsAPI::BindMaterial(Material* material) {
     }
 
     material->Bind();
+}
+
+void GraphicsAPI::BindMesh(Mesh* mesh) {
+    if (!mesh) return;
+    
+    mesh->Draw();
+}
+
+void GraphicsAPI::DrawMesh(Mesh* mesh) {
+    if (!mesh) return;
+    
+    mesh->Draw();
 }
 
 GLuint GraphicsAPI::CreateVertexBuffer(const std::vector<float>& vertices) {

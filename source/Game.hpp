@@ -2,6 +2,8 @@
 
 #include <eng.hpp>
 
+#include <memory>
+
 class Game : public eng::Application {
 public:
     bool Init() override;
@@ -10,4 +12,5 @@ public:
 
 private:
     eng::Material m_material;
+    std::unique_ptr<eng::Mesh> m_mesh;
 };

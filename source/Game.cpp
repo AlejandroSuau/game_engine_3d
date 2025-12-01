@@ -39,6 +39,29 @@ bool Game::Init() {
         vertexShaderSource, fragmentShaderSource);
     m_material.SetShaderProgram(shaderProgram);
 
+    std::unique_ptr<eng::Mesh> m_mesh;
+    std::vector<float> vertices {
+        0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f,
+        -0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f,
+        -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f,
+        0.5f, -0.5f, 0.f, 1.f, 1.f, 0.f
+    };
+
+    std::vector<unsigned int> indices {
+        0, 1, 2,
+        0, 2, 3
+    };
+
+    eng::VertexLayout vertexLayout;
+    // Position
+    vertexLayout.elements.push_back({0, 3, GL_FLOAT, 0});
+    // Color
+    vertexLayout.elements.push_back({1, 3, GL_FLOAT, sizeof(float) * 3});
+    vertexLayout.stride = sizeof(float) * 6;
+
+    m_mesh = std::make_unique<eng::Mesh>(vertexLayout, vertices, indices);
+
+
     return true;
 }
 

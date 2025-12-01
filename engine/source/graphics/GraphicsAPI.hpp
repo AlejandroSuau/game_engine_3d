@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 
+#include <vector>
 #include <memory>
 #include <string>
 
@@ -10,6 +11,7 @@ namespace eng
 
 class ShaderProgram;
 class Material;
+class Mesh;
 
 class GraphicsAPI {
 public:
@@ -19,6 +21,8 @@ public:
     
     void BindShaderProgram(ShaderProgram* shaderProgram);
     void BindMaterial(Material* material);
+    void BindMesh(Mesh* mesh);
+    void DrawMesh(Mesh* mesh);
     GLuint CreateVertexBuffer(const std::vector<float>& vertices);
     GLuint CreateIndexBuffer(const std::vector<uint32_t>& indices);
 };
