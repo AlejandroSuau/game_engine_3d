@@ -81,7 +81,7 @@ void GraphicsAPI::BindMaterial(Material* material) {
 void GraphicsAPI::BindMesh(Mesh* mesh) {
     if (!mesh) return;
     
-    mesh->Draw();
+    mesh->Bind();
 }
 
 void GraphicsAPI::DrawMesh(Mesh* mesh) {
@@ -108,6 +108,14 @@ GLuint GraphicsAPI::CreateIndexBuffer(const std::vector<uint32_t>& indices) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     
     return EBO;
+}
+
+void GraphicsAPI::SetClearColor(float r, float g, float b, float a) {
+    glClearColor(r, g, b, a);
+}
+
+void GraphicsAPI::ClearBuffers() {
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 }

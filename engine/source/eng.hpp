@@ -7,3 +7,4 @@
 #include "graphics/VertexLayout.hpp"
 #include "render/Material.hpp"
 #include "render/Mesh.hpp"
+#include "render/RenderQueue.hpp"

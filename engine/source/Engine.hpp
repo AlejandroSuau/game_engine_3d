@@ -2,6 +2,7 @@
 
 #include "input/InputManager.hpp"
 #include "graphics/GraphicsAPI.hpp"
+#include "render/RenderQueue.hpp"
 
 #include <memory>
 #include <chrono>
@@ -23,6 +24,7 @@ public:
     Application* GetApplication();
     InputManager& GetInputManager();
     GraphicsAPI& GetGraphicsAPI();
+    RenderQueue& GetRenderQueue();
 
 private:
     Engine() = default;
@@ -36,6 +38,7 @@ private:
     GLFWwindow* m_window = nullptr;
     InputManager m_inputManager;
     GraphicsAPI m_graphicsAPI;
+    RenderQueue m_renderQueue;
 };
 
 }

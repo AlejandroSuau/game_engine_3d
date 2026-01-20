@@ -39,7 +39,6 @@ bool Game::Init() {
         vertexShaderSource, fragmentShaderSource);
     m_material.SetShaderProgram(shaderProgram);
 
-    std::unique_ptr<eng::Mesh> m_mesh;
     std::vector<float> vertices {
         0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f,
         -0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f,
@@ -61,7 +60,6 @@ bool Game::Init() {
 
     m_mesh = std::make_unique<eng::Mesh>(vertexLayout, vertices, indices);
 
-
     return true;
 }
 
@@ -70,6 +68,13 @@ void Game::Update(float deltaTime) {
     if (input.IsKeyPressed(GLFW_KEY_A)) {
         std::cout << "[A] button is pressed" << std::endl;
     }
+
+    eng::RenderCommand command;
+    command.material = &m_material;
+    command.mesh = m_mesh.get();
+
+    auto& renderQueue = eng::Engine::GetInstance().GetRenderQueue();
+    renderQueue.Submit(command);
 }
 
 

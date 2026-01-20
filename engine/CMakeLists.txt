@@ -18,6 +18,8 @@ set(PROJECT_SOURCE_FILES
     source/render/Material.cpp
     source/render/Mesh.hpp
     source/render/Mesh.cpp
+    source/render/RenderQueue.hpp
+    source/render/RenderQueue.cpp
 )
 
 include_directories(source)
