@@ -2,6 +2,8 @@
 
 #include <eng.hpp>
 
+#include "scene/Scene.hpp"
+
 #include <memory>
 
 class Game : public eng::Application {
@@ -11,8 +13,5 @@ public:
     void Destroy() override;
 
 private:
-    eng::Material m_material;
-    std::unique_ptr<eng::Mesh> m_mesh;
-    float m_offsetX = 0.f;
-    float m_offsetY = 0.f;
+    eng::Scene m_scene;
 };
