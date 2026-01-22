@@ -1,5 +1,7 @@
 #include "graphics/ShaderProgram.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace eng
 {
 
@@ -34,6 +36,11 @@ void ShaderProgram::SetUniform(const std::string& name, float value) {
 void ShaderProgram::SetUniform(const std::string& name, float v0, float v1) {
     auto location = GetUniformLocation(name);
     glUniform2f(location, v0, v1);
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& matrix) {
+    auto location = GetUniformLocation(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 }
