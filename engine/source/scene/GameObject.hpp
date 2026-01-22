@@ -1,11 +1,13 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <memory>
+#include "scene/Component.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+
+#include <string>
+#include <vector>
+#include <memory>
 
 namespace eng
 {
@@ -19,6 +21,8 @@ public:
     GameObject* GetParent();
     bool IsAlive() const;
     void MarkForDestroy();
+
+    void AddComponent(Component* component);
 
     glm::vec3 GetPosition() const;
     void SetPosition(const glm::vec3& position);
@@ -37,6 +41,7 @@ private:
     std::string m_name;
     GameObject* m_parent {nullptr};
     std::vector<std::unique_ptr<GameObject>> m_children;
+    std::vector<std::unique_ptr<Component>> m_components;
     bool m_isAlive = true;
 
     glm::vec3 m_position = glm::vec3(0.f);

@@ -10,3 +10,5 @@
 #include "render/RenderQueue.hpp"
 #include "scene/GameObject.hpp"
 #include "scene/Scene.hpp"
+#include "scene/Component.hpp"
+#include "scene/components/MeshComponent.hpp"
