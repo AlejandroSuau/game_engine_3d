@@ -22,21 +22,23 @@ void PlayerControllerComponent::Update(float deltaTime) {
         float deltaY = currentPos.y - oldPos.y;
 
         // rot around Y axis
-        rotation.y -= deltaX * m_mouseSensitivity * deltaTime;
+        float yAngle = -deltaX * m_mouseSensitivity * deltaTime;
+        glm::quat yRotation = glm::angleAxis(yAngle, glm::vec3(0.f, 1.f, 0.f));
         
         // rot around X axis
-        rotation.x -= deltaY * m_mouseSensitivity * deltaTime;
+        float xAngle = -deltaY * m_mouseSensitivity * deltaTime;
+        glm::vec3 right = rotation * glm::vec3(1.f, 0.f, 0.f);
+        glm::quat xRotation = glm::angleAxis(xAngle, right);
+
+        glm::quat deltaRotation = yRotation * xRotation;
+        rotation = glm::normalize(deltaRotation * rotation);
 
         m_owner->SetRotation(rotation);
     }
 
-    glm::mat4 rotationMatrix(1.f);
-    rotationMatrix = glm::rotate(rotationMatrix, rotation.x, glm::vec3(1.f, 0.f, 0.f)); // X-axis
-    rotationMatrix = glm::rotate(rotationMatrix, rotation.y, glm::vec3(0.f, 1.f, 0.f)); // Y-axis
-    rotationMatrix = glm::rotate(rotationMatrix, rotation.z, glm::vec3(0.f, 0.f, 1.f)); // Z-axis
 
-    glm::vec3 front = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(0.f, 0.f, -1.f, 0.f)));
-    glm::vec3 right = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(1.f, 0.f, 0.f, 0.f)));
+    glm::vec3 front = rotation * glm::vec3(0.f, 0.f, -1.f);
+    glm::vec3 right = rotation * glm::vec3(1.f, 0.f, 0.f);
 
     auto position = m_owner->GetPosition();   
     // Left / Right movement

@@ -4,6 +4,7 @@
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include <string>
 #include <vector>
@@ -37,8 +38,8 @@ public:
 
     glm::vec3 GetPosition() const;
     void SetPosition(const glm::vec3& position);
-    glm::vec3 GetRotation() const;
-    void SetRotation(const glm::vec3& rotation);
+    glm::quat GetRotation() const;
+    void SetRotation(const glm::quat& rotation);
     glm::vec3 GetScale() const;
     void SetScale(const glm::vec3& scale);
 
@@ -56,7 +57,7 @@ private:
     bool m_isAlive = true;
 
     glm::vec3 m_position = glm::vec3(0.f);
-    glm::vec3 m_rotation = glm::vec3(0.f);
+    glm::quat m_rotation = glm::quat(1.f, 0.f, 0.f, 0.f);
     glm::vec3 m_scale = glm::vec3(1.f);
 
     friend class Scene;

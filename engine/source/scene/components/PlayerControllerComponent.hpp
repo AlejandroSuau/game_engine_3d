@@ -13,7 +13,7 @@ public:
 
 private:
     float m_mouseSensitivity {0.3f};
-    float m_moveSpeed {1.f};
+    float m_moveSpeed {3.f};
 
 };
 
