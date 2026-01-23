@@ -14,14 +14,31 @@ namespace eng
 {
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    Engine& engine = Engine::GetInstance();
-    InputManager& inputManager = engine.GetInputManager();
+    InputManager& inputManager = Engine::GetInstance().GetInputManager();
 
     if (action == GLFW_PRESS) {
         inputManager.SetKeyPressed(key, true);
     } else if (action == GLFW_RELEASE) {
         inputManager.SetKeyPressed(key, false);
     }
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    InputManager& inputManager = Engine::GetInstance().GetInputManager();
+    
+    if (action == GLFW_PRESS) {
+        inputManager.SetMouseButtonPressed(button, true);
+    } else if (action == GLFW_RELEASE) {
+        inputManager.SetMouseButtonPressed(button, false);
+    }
+}
+
+void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) { 
+    InputManager& inputManager = Engine::GetInstance().GetInputManager();
+    inputManager.SetMousePositionOld(inputManager.GetMousePositionCurrent());
+
+    glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
+    inputManager.SetMousePositionCurrent(currentPos);
 }
 
 Engine& Engine::GetInstance() {
@@ -55,6 +72,9 @@ bool Engine::Init(int width, int height) {
     }
 
     glfwSetKeyCallback(m_window, keyCallback);
+    glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
+    glfwSetCursorPosCallback(m_window, cursorPositionCallback);
+
     glfwMakeContextCurrent(m_window);
 
     // Initialize GLEW
@@ -105,6 +125,8 @@ void Engine::Run() {
         m_renderQueue.Draw(m_graphicsAPI, cameraData);
 
         glfwSwapBuffers(m_window);
+
+        m_inputManager.SetMousePositionOld(m_inputManager.GetMousePositionCurrent());
     }
 }
 

@@ -72,6 +72,7 @@ TestObject::TestObject() {
 void TestObject::Update(float deltaTime) {
     eng::GameObject::Update(deltaTime);
 
+#if 0
     auto position = GetPosition();
     auto& input = eng::Engine::GetInstance().GetInputManager();
     
@@ -90,4 +91,5 @@ void TestObject::Update(float deltaTime) {
     }
 
     SetPosition(position);
+#endif
 }
