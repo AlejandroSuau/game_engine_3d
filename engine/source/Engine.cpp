@@ -84,6 +84,8 @@ bool Engine::Init(int width, int height) {
         return false;
     }
 
+    m_graphicsAPI.Init();
+
     return m_application->Init();
 }
 
