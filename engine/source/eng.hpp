@@ -12,3 +12,4 @@
 #include "scene/Scene.hpp"
 #include "scene/Component.hpp"
 #include "scene/components/MeshComponent.hpp"
+#include "scene/components/CameraComponent.hpp"

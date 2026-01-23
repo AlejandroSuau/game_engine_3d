@@ -1,6 +1,10 @@
 #include "Engine.hpp"
 #include "Application.hpp"
 
+#include "scene/GameObject.hpp"
+#include "scene/Component.hpp"
+#include "scene/components/CameraComponent.hpp"
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -83,7 +87,22 @@ void Engine::Run() {
         m_graphicsAPI.SetClearColor(1.f, 1.f, 1.f, 1.f);
         m_graphicsAPI.ClearBuffers();
 
-        m_renderQueue.Draw(m_graphicsAPI);
+        CameraData cameraData;
+        int width = 0, height = 0;
+        glfwGetWindowSize(m_window, &width, &height);
+        float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+        if (m_currentScene) {
+            if (auto cameraObject = m_currentScene->GetMainCamera()) {
+                // Logic for matrices
+                auto cameraComponent = cameraObject->GetComponent<CameraComponent>();
+                if (cameraComponent) {
+                    cameraData.viewMatrix = cameraComponent->GetViewMatrix();
+                    cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspectRatio);
+                }
+            }
+        }
+
+        m_renderQueue.Draw(m_graphicsAPI, cameraData);
 
         glfwSwapBuffers(m_window);
     }
@@ -116,6 +135,14 @@ GraphicsAPI& Engine::GetGraphicsAPI() {
 
 RenderQueue& Engine::GetRenderQueue() {
     return m_renderQueue;
+}
+
+void Engine::SetScene(Scene* scene) {
+    m_currentScene.reset(scene);
+}
+
+Scene* Engine::GetScene() {
+    return m_currentScene.get();
 }
 
 }

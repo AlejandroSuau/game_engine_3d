@@ -3,6 +3,7 @@
 #include "input/InputManager.hpp"
 #include "graphics/GraphicsAPI.hpp"
 #include "render/RenderQueue.hpp"
+#include "scene/Scene.hpp"
 
 #include <memory>
 #include <chrono>
@@ -25,6 +26,9 @@ public:
     InputManager& GetInputManager();
     GraphicsAPI& GetGraphicsAPI();
     RenderQueue& GetRenderQueue();
+    
+    void SetScene(Scene* scene);
+    Scene* GetScene();
 
 private:
     Engine() = default;
@@ -39,6 +43,7 @@ private:
     InputManager m_inputManager;
     GraphicsAPI m_graphicsAPI;
     RenderQueue m_renderQueue;
+    std::unique_ptr<Scene> m_currentScene;
 };
 
 }
