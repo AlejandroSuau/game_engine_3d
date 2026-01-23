@@ -4,6 +4,7 @@
 #include "graphics/GraphicsAPI.hpp"
 #include "render/RenderQueue.hpp"
 #include "scene/Scene.hpp"
+#include "io/FileSystem.hpp"
 
 #include <memory>
 #include <chrono>
@@ -26,6 +27,7 @@ public:
     InputManager& GetInputManager();
     GraphicsAPI& GetGraphicsAPI();
     RenderQueue& GetRenderQueue();
+    FileSystem& GetFileSystem();
     
     void SetScene(Scene* scene);
     Scene* GetScene();
@@ -43,6 +45,7 @@ private:
     InputManager m_inputManager;
     GraphicsAPI m_graphicsAPI;
     RenderQueue m_renderQueue;
+    FileSystem m_fileSystem;
     std::unique_ptr<Scene> m_currentScene;
 };
 

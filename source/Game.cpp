@@ -2,7 +2,21 @@
 
 #include "TestObject.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#include <iostream>
+
 bool Game::Init() {
+    auto& fs = eng::Engine::GetInstance().GetFileSystem();
+    auto path = fs.GetAssetsFolder() / "brick.png";
+
+    int width, height, channels;
+    unsigned char* data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+    if (data) {
+        std::cout << "Image loaded" << std::endl; 
+    }
+
     m_scene = new eng::Scene();
 
     auto camera = m_scene->CreateObject("Camera");

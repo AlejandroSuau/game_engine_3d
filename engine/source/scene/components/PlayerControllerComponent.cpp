@@ -43,9 +43,9 @@ void PlayerControllerComponent::Update(float deltaTime) {
     auto position = m_owner->GetPosition();   
     // Left / Right movement
     if (inputManager.IsKeyPressed(GLFW_KEY_A)) {
-        position += right * m_moveSpeed * deltaTime;
+        position -= right * m_moveSpeed * deltaTime;
     } else if (inputManager.IsKeyPressed(GLFW_KEY_D)) {
-        position -= right * m_moveSpeed * deltaTime; 
+        position += right * m_moveSpeed * deltaTime; 
     }
 
     // Up / Down movement
