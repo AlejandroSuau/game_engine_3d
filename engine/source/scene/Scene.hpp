@@ -1,13 +1,14 @@
 #pragma once
 
+#include "scene/GameObject.hpp"
+#include "EngineCommon.hpp"
+
 #include <vector>
 #include <string>
 #include <memory>
 
 namespace eng
 {
-
-class GameObject;
 
 class Scene
 {
@@ -30,9 +31,13 @@ public:
     void SetMainCamera(GameObject* camera);
     GameObject* GetMainCamera();
 
+    std::vector<LightData> CollectLights();
+
 private:
     std::vector<std::unique_ptr<GameObject>> m_objects;
     GameObject* m_mainCamera {nullptr};
+
+    void CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out);
 };
 
 }

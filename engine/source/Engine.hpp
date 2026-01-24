@@ -3,7 +3,6 @@
 #include "input/InputManager.hpp"
 #include "graphics/GraphicsAPI.hpp"
 #include "render/RenderQueue.hpp"
-#include "scene/Scene.hpp"
 #include "io/FileSystem.hpp"
 
 #include <memory>
@@ -13,7 +12,9 @@ struct GLFWwindow;
 namespace eng
 {
 
+class Scene;
 class Application;
+
 class Engine {
 public:
     static Engine& GetInstance();

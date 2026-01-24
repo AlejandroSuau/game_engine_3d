@@ -1,6 +1,9 @@
 #include "Engine.hpp"
-#include "Application.hpp"
 
+#include "Application.hpp"
+#include "EngineCommon.hpp"
+
+#include "scene/Scene.hpp"
 #include "scene/GameObject.hpp"
 #include "scene/Component.hpp"
 #include "scene/components/CameraComponent.hpp"
@@ -110,6 +113,7 @@ void Engine::Run() {
         m_graphicsAPI.ClearBuffers();
 
         CameraData cameraData;
+        std::vector<LightData> lights;
         int width = 0, height = 0;
         glfwGetWindowSize(m_window, &width, &height);
         float aspectRatio = static_cast<float>(width) / static_cast<float>(height);
@@ -122,9 +126,11 @@ void Engine::Run() {
                     cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspectRatio);
                 }
             }
+
+            lights = m_currentScene->CollectLights();
         }
 
-        m_renderQueue.Draw(m_graphicsAPI, cameraData);
+        m_renderQueue.Draw(m_graphicsAPI, cameraData, lights);
 
         glfwSwapBuffers(m_window);
 

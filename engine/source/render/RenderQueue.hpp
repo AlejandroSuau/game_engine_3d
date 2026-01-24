@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EngineCommon.hpp"
+
 #include <glm/mat4x4.hpp>
 
 #include <vector>
@@ -18,17 +20,14 @@ struct RenderCommand
     glm::mat4 modelMatrix;
 };
 
-struct CameraData 
-{
-    glm::mat4 viewMatrix;
-    glm::mat4 projectionMatrix;
-};
-
 class RenderQueue
 {
 public:
     void Submit(const RenderCommand& command);
-    void Draw(GraphicsAPI& graphicsAPI, const CameraData& cameraData);
+    void Draw(
+        GraphicsAPI& graphicsAPI,
+        const CameraData& cameraData,
+        const std::vector<LightData>& lights);
     
 private:
     std::vector<RenderCommand> m_commands;

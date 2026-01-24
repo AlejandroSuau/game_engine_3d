@@ -43,8 +43,11 @@ set(PROJECT_SOURCE_FILES
     source/scene/components/CameraComponent.cpp
     source/scene/components/PlayerControllerComponent.hpp
     source/scene/components/PlayerControllerComponent.cpp
+    source/scene/components/LightComponent.hpp
+    source/scene/components/LightComponent.cpp
     source/io/FileSystem.hpp
     source/io/FileSystem.cpp
+    source/EngineCommon.hpp
 )
 
 include_directories(source)

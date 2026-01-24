@@ -36,11 +36,12 @@ public:
         return nullptr;
     }
 
-    glm::vec3 GetPosition() const;
+    const glm::vec3& GetPosition() const;
+    glm::vec3 GetWorldPosition() const;
     void SetPosition(const glm::vec3& position);
-    glm::quat GetRotation() const;
+    const glm::quat& GetRotation() const;
     void SetRotation(const glm::quat& rotation);
-    glm::vec3 GetScale() const;
+    const glm::vec3& GetScale() const;
     void SetScale(const glm::vec3& scale);
 
     glm::mat4 GetLocalTransform() const;

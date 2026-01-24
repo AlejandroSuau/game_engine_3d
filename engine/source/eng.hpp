@@ -15,4 +15,6 @@
 #include "scene/components/MeshComponent.hpp"
 #include "scene/components/CameraComponent.hpp"
 #include "scene/components/PlayerControllerComponent.hpp"
+#include "scene/components/LightComponent.hpp"
 #include "io/FileSystem.hpp"
+#include "EngineCommon.hpp"

@@ -45,15 +45,20 @@ void GameObject::AddComponent(Component* component) {
     component->m_owner = this;
 }
 
-glm::vec3 GameObject::GetPosition() const {
+const glm::vec3& GameObject::GetPosition() const {
     return m_position;
+}
+
+glm::vec3 GameObject::GetWorldPosition() const {
+    glm::vec4 hom = GetWorldTransform() * glm::vec4(0.f, 0.f, 0.f, 1.f);
+    return glm::vec3(hom) / hom.w;
 }
 
 void GameObject::SetPosition(const glm::vec3& position) {
     m_position = position;
 }
 
-glm::quat GameObject::GetRotation() const {
+const glm::quat& GameObject::GetRotation() const {
     return m_rotation;
 }
 
@@ -61,7 +66,7 @@ void GameObject::SetRotation(const glm::quat& rotation) {
     m_rotation = rotation;
 }
 
-glm::vec3 GameObject::GetScale() const {
+const glm::vec3& GameObject::GetScale() const {
     return m_scale;
 }
 
