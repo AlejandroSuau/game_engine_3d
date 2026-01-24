@@ -2,24 +2,12 @@
 
 #include "TestObject.hpp"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
 #include <iostream>
+#include <string>
 
 bool Game::Init() {
     auto& fs = eng::Engine::GetInstance().GetFileSystem();
-    auto path = fs.GetAssetsFolder() / "brick.png";
-
-    int width, height, channels;
-    unsigned char* data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
-    
-    std::shared_ptr<eng::Texture> texture;
-    if (data) {
-        texture = std::make_shared<eng::Texture>(width, height, channels, data);
-        std::cout << "Image loaded" << std::endl;
-        stbi_image_free(data);
-    }
+    auto texture = eng::Texture::Load("brick.png");
 
     m_scene = new eng::Scene();
 
@@ -30,8 +18,9 @@ bool Game::Init() {
     m_scene->SetMainCamera(camera);
     m_scene->CreateObject<TestObject>("TestObject");
 
-
-std::string vertexShaderSource = R"(
+    std::string vertexShaderSource = fs.LoadAssetFileText("shaders/vertex.glsl");
+    std::string fragmentShaderSource = fs.LoadAssetFileText("shaders/fragment.glsl");
+    /*std::string vertexShaderSource = R"(
         #version 330 core
         layout (location = 0) in vec3 position;
         layout (location = 1) in vec3 color;
@@ -50,11 +39,11 @@ std::string vertexShaderSource = R"(
             vUV = uv;
             gl_Position = uProjection * uView * uModel * vec4(position, 1.0);
         }
-    )";
+    )";*/
 
     
     // output value from the shader
-    std::string fragmentShaderSource = R"(
+    /*std::string fragmentShaderSource = R"(
         #version 330 core
         out vec4 FragColor;
 
@@ -68,7 +57,7 @@ std::string vertexShaderSource = R"(
             vec4 texColor = texture(brickTexture, vUV);
             FragColor = texColor * vec4(vColor, 1.0);
         }
-    )";
+    )";*/
 
     auto& graphicsAPI = eng::Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(
@@ -88,8 +77,9 @@ std::string vertexShaderSource = R"(
         // Top face
         0.5f, 0.5f, -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f,
         -0.5f, 0.5f, -0.5f, 0.f, 1.f, 0.f, 0.f, 1.f,
-        -0.5f, -0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.f,
-        0.5f, -0.5f, -0.5f, 1.f, 1.f, 0.f, 1.f, 0.f,
+        -0.5f, 0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f,
+        0.5f, 0.5f, 0.5f, 1.f, 1.f, 0.f, 1.f, 0.f,
+
 
         // Right face
         0.5f, 0.5f, -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f,

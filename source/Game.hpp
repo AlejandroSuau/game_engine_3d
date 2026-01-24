@@ -2,8 +2,6 @@
 
 #include <eng.hpp>
 
-#include "scene/Scene.hpp"
-
 #include <memory>
 
 class Game : public eng::Application {
