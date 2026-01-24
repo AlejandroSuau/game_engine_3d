@@ -21,8 +21,15 @@ void Texture::Init(int width, int height, int numChannels, unsigned char* data) 
     glGenTextures(1, &m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
 
+    GLint internalFormat = GL_RGB;
+    GLenum format = GL_RGB;
+    if (numChannels == 4) {
+        internalFormat = GL_RGBA;
+        format = GL_RGBA;
+    }
+
     // Load data to the GPU
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
     // Generate mipmaps (are smaller versions of the same texture)
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -67,6 +74,17 @@ Texture::~Texture() {
 
 GLuint Texture::GetID() const {
     return m_textureID;
+}
+
+std::shared_ptr<Texture> TextureManager::GetOrLoadTexture(const std::string& path) {
+    auto it = m_textures.find(path);
+    if (it == m_textures.end()) {
+        auto texture = Texture::Load(path);
+        m_textures[path] = texture;
+        return texture;
+    }
+
+    return it->second;
 }
 
 }

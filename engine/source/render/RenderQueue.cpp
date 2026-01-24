@@ -23,6 +23,7 @@ void RenderQueue::Draw(
         shaderProgram->SetUniform("uModel", command.modelMatrix);
         shaderProgram->SetUniform("uView", cameraData.viewMatrix);
         shaderProgram->SetUniform("uProjection", cameraData.projectionMatrix);
+        shaderProgram->SetUniform("uCameraPos", cameraData.position);
         if (!lights.empty()) {
             auto& light = lights[0];
             shaderProgram->SetUniform("uLight.color", light.color);

@@ -278,7 +278,7 @@ void ParseGLTFNode(cgltf_node* node, GameObject* parent, const std::filesystem::
                     if (texture && texture->image) {
                         if (texture->image->uri) {
                             auto path = folder / std::string(texture->image->uri);
-                            auto tex = Texture::Load(path.string());
+                            auto tex = Engine::GetInstance().GetTextureManager().GetOrLoadTexture(path.string());
                             mat->SetParam("baseColorTexture", tex);
                         }
                     }
@@ -289,7 +289,7 @@ void ParseGLTFNode(cgltf_node* node, GameObject* parent, const std::filesystem::
                     if (texture && texture->image) {
                         if (texture->image->uri) {
                             auto path = folder / std::string(texture->image->uri);
-                            auto tex = Texture::Load(path.string());
+                            auto tex = Engine::GetInstance().GetTextureManager().GetOrLoadTexture(path.string());
                             mat->SetParam("baseColorTexture", tex);
                         }
                     }
