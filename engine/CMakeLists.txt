@@ -68,6 +68,9 @@ include_directories(thirdparty/glm/glm)
 # STB Image
 include_directories(thirdparty/stb_image)
 
+# nlohman json
+include_directories(thirdparty/json)
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
 # Link all thirdparty libraries

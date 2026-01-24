@@ -24,6 +24,8 @@ include_directories(engine/source)
 
 include_directories(engine/thirdparty/stb_image)
 
+include_directories(engine/thirdparty/json)
+
 # Link engine libraries
 target_link_libraries(${PROJECT_NAME}
     Engine
