@@ -3,9 +3,6 @@
 #include "graphics/GraphicsAPI.hpp"
 #include "Engine.hpp"
 
-#define CGLTF_IMPLEMENTATION
-#include <cgltf.h>
-
 namespace eng
 {
 
@@ -156,6 +153,7 @@ std::shared_ptr<Mesh> Mesh::CreateCube() {
     return result;
 }
 
+#if 0
 std::shared_ptr<Mesh> Mesh::Load(const std::string& path) {
     auto& engine = Engine::GetInstance();
     auto& fs = engine.GetFileSystem();
@@ -297,5 +295,6 @@ std::shared_ptr<Mesh> Mesh::Load(const std::string& path) {
     cgltf_free(data);
     return result;
 }
+#endif
 
 }

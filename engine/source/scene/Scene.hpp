@@ -21,6 +21,7 @@ public:
     template<typename T, typename = typename std::enable_if_t<std::is_base_of_v<GameObject, T>>>
     T* CreateObject(const std::string& name, GameObject* parent = nullptr) {
         auto obj = new T();
+        obj->m_scene = this;
         obj->SetName(name);
         SetParent(obj, parent);
 

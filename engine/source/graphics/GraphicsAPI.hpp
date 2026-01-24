@@ -21,6 +21,7 @@ public:
         const std::string& vertexSource,
         const std::string& fragmentSource);
     
+    const std::shared_ptr<ShaderProgram>& GetDefaultShaderProgram();
     void BindShaderProgram(ShaderProgram* shaderProgram);
     void BindMaterial(Material* material);
     void BindMesh(Mesh* mesh);
@@ -30,6 +31,9 @@ public:
 
     void SetClearColor(float r, float g, float b, float a);
     void ClearBuffers();
+
+private:
+    std::shared_ptr<ShaderProgram> m_defaultShaderProgram;
 };
 
 }
