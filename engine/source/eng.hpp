@@ -5,6 +5,7 @@
 #include "input/InputManager.hpp"
 #include "graphics/GraphicsAPI.hpp"
 #include "graphics/VertexLayout.hpp"
+#include "graphics/Texture.hpp"
 #include "render/Material.hpp"
 #include "render/Mesh.hpp"
 #include "render/RenderQueue.hpp"
