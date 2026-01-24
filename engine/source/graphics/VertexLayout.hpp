@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 
 #include <vector>
+#include <stdint.h>
 
 namespace eng
 {
@@ -13,6 +14,10 @@ struct VertexElement
     GLuint size; // Number of components
     GLuint type; // datatype (e.g. GL_FLOAT)
     uint32_t offset; // Bytes offset
+
+    static constexpr int PositionIndex = 0;
+    static constexpr int ColorIndex = 1;
+    static constexpr int UVIndex = 2;
 };
 
 struct VertexLayout

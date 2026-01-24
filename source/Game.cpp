@@ -98,7 +98,7 @@ bool Game::Init() {
 
     auto objectA = m_scene->CreateObject("ObjectA");
     objectA->AddComponent(new eng::MeshComponent(material, mesh));
-    objectA->SetPosition(glm::vec3(0.0f, 2.f, 0.f));
+    objectA->SetPosition(glm::vec3(1.0f, 0.f, -5.f));
 
     auto objectB = m_scene->CreateObject("ObjectB");
     objectB->AddComponent(new eng::MeshComponent(material, mesh));
@@ -110,6 +110,13 @@ bool Game::Init() {
     objectC->SetPosition(glm::vec3(-2.0f, 0.f, 0.f));
     objectC->SetRotation(glm::vec3(0.0f, 0.f, 1.f));
     objectC->SetScale(glm::vec3(1.5f, 1.5f, 1.5f));
+
+    auto suzanneMesh = eng::Mesh::Load("models/suzanne/suzanne.gltf");
+    auto suzanneMaterial = eng::Material::Load("materials/suzanne.mat");
+
+    auto suzanneObj = m_scene->CreateObject("Suzanne");
+    suzanneObj->AddComponent(new eng::MeshComponent(suzanneMaterial, suzanneMesh));
+    suzanneObj->SetPosition(glm::vec3(0.f, 0.f, -5.f));
 
     eng::Engine::GetInstance().SetScene(m_scene);
 

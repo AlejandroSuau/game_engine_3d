@@ -4,6 +4,9 @@
 
 #include "graphics/VertexLayout.hpp"
 
+#include <memory>
+#include <string>
+
 namespace eng
 {
 
@@ -21,6 +24,8 @@ public:
     void Bind();
     void Draw();
 
+    static std::shared_ptr<Mesh> Load(const std::string& path);
+    
 private:
     VertexLayout m_vertexLayout;
     GLuint m_VBO {0};// for vertices
