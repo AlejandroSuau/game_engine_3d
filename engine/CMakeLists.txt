@@ -45,6 +45,8 @@ set(PROJECT_SOURCE_FILES
     source/scene/components/PlayerControllerComponent.cpp
     source/scene/components/LightComponent.hpp
     source/scene/components/LightComponent.cpp
+    source/scene/components/AnimationComponent.hpp
+    source/scene/components/AnimationComponent.cpp
     source/io/FileSystem.hpp
     source/io/FileSystem.cpp
     source/EngineCommon.hpp
