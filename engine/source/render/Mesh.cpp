@@ -72,44 +72,44 @@ void Mesh::Draw() {
     }
 }
 
-std::shared_ptr<Mesh> Mesh::CreateCube() {
+std::shared_ptr<Mesh> Mesh::CreateBox(const glm::vec3& extents) {
+    const glm::vec3 half = extents * 0.5f;
     std::vector<float> vertices {
         // Front face
-        0.5f, 0.5f, 0.5f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f,
-        -0.5f, 0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
-        -0.5f, -0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-        0.5f, -0.5f, 0.5f, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f,
+        half.x, half.y, half.z, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f,
+        -half.x, half.y, half.z, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f,
+        -half.x, -half.y, half.z, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+        half.x, -half.y, half.z, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f,
 
         // Top face
-        0.5f, 0.5f, -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 0.f,
-        -0.5f, 0.5f, -0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f,
-        -0.5f, 0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f, 0.f,
-        0.5f, 0.5f, 0.5f, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f,
-
+        half.x,  half.y, -half.z, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 1.f, 0.f,
+        -half.x, half.y, -half.z, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f,
+        -half.x, half.y, half.z, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f, 0.f,
+        half.x,  half.y, half.z, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f,
 
         // Right face
-        0.5f, 0.5f, -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f, 1.f, 0.f, 0.f,
-        0.5f, 0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f,
-        0.5f, -0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f,
-        0.5f, -0.5f, -0.5f, 1.f, 1.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f,
+        half.x, half.y, -half.z, 1.f, 0.f, 0.f, 1.f, 1.f, 1.f, 0.f, 0.f,
+        half.x, half.y, half.z, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f,
+        half.x, -half.y, half.z, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f,
+        half.x, -half.y, -half.z, 1.f, 1.f, 0.f, 1.f, 0.f, 1.f, 0.f, 0.f,
 
         // Left face
-        -0.5f, 0.5f, 0.5f, 1.f, 0.f, 0.f, 1.f, 1.f, -1.f, 0.f, 0.f,
-        -0.5f, 0.5f, -0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, -1.f, 0.f, 0.f,
-        -0.5f, -0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, -1.f, 0.f, 0.f,
-        -0.5f, -0.5f, 0.5f, 1.f, 1.f, 0.f, 1.f, 0.f, -1.f, 0.f, 0.f,
+        -half.x, half.y, half.z, 1.f, 0.f, 0.f, 1.f, 1.f, -1.f, 0.f, 0.f,
+        -half.x, half.y, -half.z, 0.f, 1.f, 0.f, 0.f, 1.f, -1.f, 0.f, 0.f,
+        -half.x, -half.y, -half.z, 0.f, 0.f, 1.f, 0.f, 0.f, -1.f, 0.f, 0.f,
+        -half.x, -half.y, half.z, 1.f, 1.f, 0.f, 1.f, 0.f, -1.f, 0.f, 0.f,
 
         // Bottom face
-        0.5f, -0.5f, 0.5f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, -1.f, 0.f,
-        -0.5f, -0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, -1.f, 0.f,
-        -0.5f, -0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, -1.f, 0.f,
-        0.5f, -0.5f, -0.5f, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, -1.f, 0.f,
+        half.x, -half.y, half.z, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, -1.f, 0.f,
+        -half.x, -half.y, half.z, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, -1.f, 0.f,
+        -half.x, -half.y, -half.z, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, -1.f, 0.f,
+        half.x, -half.y, -half.z, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, -1.f, 0.f,
 
         // Back face
-        -0.5f, 0.5f, -0.5f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, -1.f,
-        0.5f, 0.5f, -0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f, -1.f,
-        0.5f, -0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, -1.f,
-        -0.5f, -0.5f, -0.5f, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 0.f, -1.f,
+        -half.x, half.y, -half.z, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, -1.f,
+        half.x, half.y, -half.z, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f, -1.f,
+        half.x, -half.y, -half.z, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, -1.f,
+        -half.x, -half.y, -half.z, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 0.f, -1.f,
     };
 
     std::vector<unsigned int> indices {

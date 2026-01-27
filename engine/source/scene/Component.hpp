@@ -10,6 +10,7 @@ class GameObject;
 class Component {
 public:
     virtual ~Component() = default;
+    virtual void Init();
     virtual void Update(float deltaTime) = 0;
     virtual std::size_t GetTypeId() const = 0;
 

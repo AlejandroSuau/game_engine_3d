@@ -5,6 +5,7 @@
 #include "graphics/Texture.hpp"
 #include "render/RenderQueue.hpp"
 #include "io/FileSystem.hpp"
+#include "physics/PhysicsManager.hpp"
 
 #include <memory>
 #include <chrono>
@@ -31,6 +32,7 @@ public:
     RenderQueue& GetRenderQueue();
     FileSystem& GetFileSystem();
     TextureManager& GetTextureManager();
+    PhysicsManager& GetPhysicsManager();
 
     void SetScene(Scene* scene);
     Scene* GetScene();
@@ -50,6 +52,7 @@ private:
     RenderQueue m_renderQueue;
     FileSystem m_fileSystem;
     TextureManager m_textureManager;
+    PhysicsManager m_physicsManager;
     std::unique_ptr<Scene> m_currentScene;
 };
 

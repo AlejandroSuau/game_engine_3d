@@ -88,6 +88,7 @@ bool Engine::Init(int width, int height) {
     }
 
     m_graphicsAPI.Init();
+    m_physicsManager.Init();
 
     return m_application->Init();
 }
@@ -106,6 +107,8 @@ void Engine::Run() {
         auto now = std::chrono::high_resolution_clock::now();
         float deltaTime = std::chrono::duration<float>(now - m_lastTimePoint).count();
         m_lastTimePoint = now;
+
+        m_physicsManager.Update(deltaTime);
 
         m_application->Update(deltaTime);
 
@@ -174,6 +177,10 @@ FileSystem& Engine::GetFileSystem() {
 
 TextureManager& Engine::GetTextureManager() {
     return m_textureManager;
+}
+
+PhysicsManager& Engine::GetPhysicsManager() {
+    return m_physicsManager;
 }
 
 void Engine::SetScene(Scene* scene) {

@@ -17,5 +17,6 @@
 #include "scene/components/PlayerControllerComponent.hpp"
 #include "scene/components/LightComponent.hpp"
 #include "scene/components/AnimationComponent.hpp"
+#include "scene/components/PhysicsComponent.hpp"
 #include "io/FileSystem.hpp"
 #include "EngineCommon.hpp"
