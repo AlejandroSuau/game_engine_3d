@@ -47,4 +47,12 @@ const glm::vec2 InputManager::GetMousePositionCurrent() const {
     return m_mousePositionCurrent;
 }
 
+void InputManager::SetMousePositionChanged(bool changed) {
+    m_mousePositionChanged = changed;
+}
+
+bool InputManager::IsMousePositionChanged() const {
+    return m_mousePositionChanged;
+}
+
 }

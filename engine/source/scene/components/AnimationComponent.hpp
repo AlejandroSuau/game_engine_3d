@@ -52,6 +52,8 @@ public:
     void RegisterClip(const std::string& name, const std::shared_ptr<AnimationClip>& clip);
     void Play(const std::string& name, bool loop = true);
 
+    bool IsPlaying() const;
+
 private:
     AnimationClip* m_clip {nullptr};
     float m_time = 0.f;

@@ -22,6 +22,9 @@ public:
     void SetMousePositionCurrent(const glm::vec2& pos);
     const glm::vec2 GetMousePositionCurrent() const;
 
+    void SetMousePositionChanged(bool changed);
+    bool IsMousePositionChanged() const;
+
 private:
     friend class Engine;
 
@@ -29,6 +32,7 @@ private:
     std::array<bool, 16> m_mouseKeys {false};
     glm::vec2 m_mousePositionOld {0.f};
     glm::vec2 m_mousePositionCurrent {0.f};
+    bool m_mousePositionChanged {false};
 
     InputManager() = default;
     InputManager(const InputManager&) = delete;

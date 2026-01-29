@@ -42,6 +42,8 @@ void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
 
     glm::vec2 currentPos(static_cast<float>(xpos), static_cast<float>(ypos));
     inputManager.SetMousePositionCurrent(currentPos);
+
+    inputManager.SetMousePositionChanged(true);
 }
 
 Engine& Engine::GetInstance() {
@@ -77,6 +79,7 @@ bool Engine::Init(int width, int height) {
     glfwSetKeyCallback(m_window, keyCallback);
     glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
     glfwSetCursorPosCallback(m_window, cursorPositionCallback);
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(m_window);
 
@@ -138,7 +141,7 @@ void Engine::Run() {
 
         glfwSwapBuffers(m_window);
 
-        m_inputManager.SetMousePositionOld(m_inputManager.GetMousePositionCurrent());
+        m_inputManager.SetMousePositionChanged(false);
     }
 }
 
