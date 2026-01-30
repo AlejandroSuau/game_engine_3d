@@ -1,9 +1,22 @@
 #include "scene/Scene.hpp"
 
+#include "scene/components/AnimationComponent.hpp"
+#include "scene/components/CameraComponent.hpp"
 #include "scene/components/LightComponent.hpp"
+#include "scene/components/PhysicsComponent.hpp"
+#include "scene/components/PlayerControllerComponent.hpp"
+#include "Engine.hpp"
 
 namespace eng
 {
+
+void Scene::RegisterTypes() {
+    AnimationComponent::Register();
+    CameraComponent::Register();
+    LightComponent::Register();
+    PhysicsComponent::Register();
+    PlayerControllerComponent::Register();
+}
 
 void Scene::Update(float deltaTime) {
     for (auto it = m_objects.begin(); it != m_objects.end();) {
@@ -147,6 +160,29 @@ std::vector<LightData> Scene::CollectLights() {
     return lights;
 }
 
+std::shared_ptr<Scene> Scene::Load(const std::string& path) {
+    const std::string contents = Engine::GetInstance().GetFileSystem().LoadAssetFileText(path);
+    if (contents.empty()) {
+        return nullptr;
+    }
+
+    auto json = nlohmann::json::parse(contents);
+    if (json.empty()) {
+        return nullptr;
+    }
+
+    auto result = std::make_shared<Scene>();
+    const std::string sceneName = json.value("name", "noname");
+    if (json.contains("objects") && json["objects"].is_array()) {
+        const auto& objects = json["objects"];
+        for (const auto& obj : objects) {
+            result->LoadObject(obj, nullptr);
+        }
+    }
+
+    return result;
+}
+
 void Scene::CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out) {
     if (auto light = obj->GetComponent<LightComponent>()) {
         LightData data;
@@ -157,6 +193,61 @@ void Scene::CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out)
 
     for (auto& child : obj->m_children) {
         CollectLightsRecursive(child.get(), out);
+    }
+}
+
+void Scene::LoadObject(const nlohmann::json& jsonObject, GameObject* parent) {
+    const std::string name = jsonObject.value("name", "Object");
+    GameObject* gameObject = nullptr;
+    if (jsonObject.contains("type")) {
+        const std::string type = jsonObject.value("type", "");
+    } else {
+        gameObject = CreateObject(name, parent);
+    }
+
+    if (!gameObject) {
+        return;
+    }
+
+    // Read transform
+    if (jsonObject.contains("position")) {
+        auto posObj = jsonObject["position"];
+        glm::vec3 pos;
+        pos.x = posObj.value("x", 0.f);
+        pos.y = posObj.value("y", 0.f);
+        pos.z = posObj.value("z", 0.f);
+        gameObject->SetPosition(pos);
+    }
+
+    if (jsonObject.contains("rotation")) {
+        auto rotObj = jsonObject["rotation"];
+        glm::quat rot;
+        rot.x = rotObj.value("x", 0.f);
+        rot.y = rotObj.value("y", 0.f);
+        rot.z = rotObj.value("z", 0.f);
+        rot.w = rotObj.value("w", 0.f);
+        gameObject->SetRotation(rot);
+    }
+
+    if (jsonObject.contains("scale")) {
+        auto scaleObj = jsonObject["scale"];
+        glm::vec3 scale;
+        scale.x = scaleObj.value("x", 0.f);
+        scale.y = scaleObj.value("y", 0.f);
+        scale.z = scaleObj.value("z", 0.f);
+        gameObject->SetScale(scale);
+    }
+
+    if (jsonObject.contains("components") && jsonObject["components"].is_array()) {
+        const auto& components = jsonObject["components"];
+        for (const auto& comp : components) {
+            const std::string type = comp.value("type", "");
+            Component* component = ComponentFactory::GetInstance().CreateComponent(type);
+            if (component) {
+                component->LoadProperties(comp);
+                gameObject->AddComponent(component);
+            }
+        }
     }
 }
 

@@ -119,12 +119,42 @@ void GameObject::SetPosition(const glm::vec3& position) {
     m_position = position;
 }
 
+void GameObject::SetWorldPosition(const glm::vec3& position) {
+    if (m_parent) {
+        glm::mat4 parentWorld = m_parent->GetWorldTransform();
+        glm::mat4 invParentWorld = glm::inverse(parentWorld);
+        glm::vec4 localPos = invParentWorld * glm::vec4(position, 1.f);
+        SetPosition(glm::vec3(localPos) / localPos.w);
+    } else {
+        SetPosition(position);
+    }
+}
+
 const glm::quat& GameObject::GetRotation() const {
     return m_rotation;
 }
 
+glm::quat GameObject::GetWorldRotation() {
+    if (m_parent) {
+        return m_parent->GetWorldRotation() * m_rotation;
+    } else {
+        return m_rotation;
+    }
+}
+
 void GameObject::SetRotation(const glm::quat& rotation) { 
     m_rotation = rotation;
+}
+
+void GameObject::SetWorldRotation(const glm::quat& rotation) {
+    if (m_parent) {
+        glm::quat parentWorld = m_parent->GetWorldTransform();
+        glm::quat invParentWorld = glm::inverse(parentWorld);
+        glm::quat localRotation = invParentWorld * rotation;
+        SetRotation(localRotation);
+    } else {
+        SetRotation(rotation);
+    }
 }
 
 const glm::vec3& GameObject::GetScale() const {

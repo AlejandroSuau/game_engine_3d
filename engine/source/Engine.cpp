@@ -56,6 +56,9 @@ bool Engine::Init(int width, int height) {
         return false;
     }
 
+    Scene::RegisterTypes();
+    m_application->RegisterTypes();
+
     // Initialize GLFW
     if (!glfwInit()) {
         std::cout << "Error initializing GLFW" << std::endl;

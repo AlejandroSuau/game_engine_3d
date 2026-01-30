@@ -3,6 +3,8 @@
 #include "scene/GameObject.hpp"
 #include "EngineCommon.hpp"
 
+#include <nlohmann/json.hpp>
+
 #include <vector>
 #include <string>
 #include <memory>
@@ -13,6 +15,7 @@ namespace eng
 class Scene
 {
 public:
+    static void RegisterTypes();
     void Update(float deltaTime);
     void Clear();
     
@@ -33,12 +36,14 @@ public:
     GameObject* GetMainCamera();
 
     std::vector<LightData> CollectLights();
+    static std::shared_ptr<Scene> Load(const std::string& path);
 
 private:
     std::vector<std::unique_ptr<GameObject>> m_objects;
     GameObject* m_mainCamera {nullptr};
 
     void CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out);
+    void LoadObject(const nlohmann::json& jsonObject, GameObject* parent);
 };
 
 }

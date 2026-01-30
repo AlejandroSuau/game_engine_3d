@@ -15,7 +15,7 @@ void PhysicsComponent::Init() {
     }
 
     const auto pos = m_owner->GetWorldPosition();
-    const auto rot = m_owner->GetRotation();
+    const auto rot = m_owner->GetWorldRotation();
 
     m_rigidBody->SetPosition(pos);
     m_rigidBody->SetRotation(rot);
@@ -29,9 +29,13 @@ void PhysicsComponent::Update(float deltaTime) {
     }
 
     if (m_rigidBody->GetType() == BodyType::Dynamic) {
-        m_owner->SetPosition(m_rigidBody->GetPosition());
-        m_owner->SetRotation(m_rigidBody->GetRotation());
+        m_owner->SetWorldPosition(m_rigidBody->GetPosition());
+        m_owner->SetWorldRotation(m_rigidBody->GetRotation());
     }
+}
+
+void PhysicsComponent::SetRigidBody(const std::shared_ptr<RigidBody>& body) {
+    m_rigidBody = body;
 }
 
 }

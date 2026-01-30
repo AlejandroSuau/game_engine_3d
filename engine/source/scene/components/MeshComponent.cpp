@@ -9,7 +9,9 @@
 namespace eng
 {
 
-MeshComponent::MeshComponent(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh) 
+MeshComponent::MeshComponent(
+    const std::shared_ptr<Material>& material,
+    const std::shared_ptr<Mesh>& mesh) 
     : m_material(material), m_mesh(mesh) {}
 
 void MeshComponent::Update(float deltaTime) {
@@ -24,6 +26,14 @@ void MeshComponent::Update(float deltaTime) {
 
     auto& renderQueue = Engine::GetInstance().GetRenderQueue();
     renderQueue.Submit(command);    
+}
+
+void MeshComponent::SetMaterial(const std::shared_ptr<Material>& material) {
+    m_material = material;
+}
+
+void MeshComponent::SetMesh(const std::shared_ptr<Mesh>& mesh) {
+    m_mesh = mesh;
 }
 
 }

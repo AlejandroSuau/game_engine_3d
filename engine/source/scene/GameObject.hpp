@@ -44,11 +44,17 @@ public:
     }
 
     GameObject* FindChildByName(const std::string& name);
+    
     const glm::vec3& GetPosition() const;
     glm::vec3 GetWorldPosition() const;
     void SetPosition(const glm::vec3& position);
+    void SetWorldPosition(const glm::vec3& position);
+    
     const glm::quat& GetRotation() const;
+    glm::quat GetWorldRotation();
     void SetRotation(const glm::quat& rotation);
+    void SetWorldRotation(const glm::quat& rotation);
+    
     const glm::vec3& GetScale() const;
     void SetScale(const glm::vec3& scale);
 
