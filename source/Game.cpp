@@ -6,6 +6,10 @@
 #include <iostream>
 #include <string>
 
+void Game::RegisterTypes() {
+    Player::Register();
+}
+
 bool Game::Init() {
     auto& fs = eng::Engine::GetInstance().GetFileSystem();
     auto texture = eng::Texture::Load("brick.png");

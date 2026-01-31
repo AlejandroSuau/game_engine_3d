@@ -60,14 +60,7 @@ public:
         m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
     }
 
-    Component* CreateComponent(const std::string& name) {
-        auto it = m_creators.find(name);
-        if (it == m_creators.end()) {
-            return nullptr;
-        }
-
-        return it->second->CreateComponent();
-    }
+    Component* CreateComponent(const std::string& name);
 
 private:
     std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> m_creators;
@@ -78,5 +71,4 @@ public: \
     static std::size_t TypeId() { return eng::Component::StaticTypeId<ComponentClass>(); } \
     std::size_t GetTypeId() const override { return TypeId(); } \
     static void Register() { eng::ComponentFactory::GetInstance().RegisterComponent<ComponentClass>(std::string(#ComponentClass)); }
-
 }

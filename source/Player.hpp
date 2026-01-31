@@ -3,6 +3,7 @@
 #include <eng.hpp>
 
 class Player : public eng::GameObject {
+    GAMEOBJECT(Player)
 public:
     void Init();
     void Update(float deltaTime) override;

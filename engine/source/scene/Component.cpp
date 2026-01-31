@@ -22,4 +22,13 @@ ComponentFactory& ComponentFactory::GetInstance() {
     return instance;
 }
 
+Component* ComponentFactory::CreateComponent(const std::string& name) {
+    auto it = m_creators.find(name);
+    if (it == m_creators.end()) {
+        return nullptr;
+    }
+
+    return it->second->CreateComponent();
+}
+
 }

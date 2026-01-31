@@ -42,6 +42,19 @@ GameObject* Scene::CreateObject(const std::string& name, GameObject* parent) {
     return obj;
 }
 
+GameObject* Scene::CreateObject(const std::string& type, const std::string& name, GameObject* parent = nullptr) {
+    auto obj = GameObjectFactory::GetInstance().CreateGameObject(type);
+    if (!obj) {
+        return;
+    }
+
+    obj->SetName(name);
+    obj->m_scene = this;
+    SetParent(obj, parent);
+
+    return obj;
+}
+
 bool Scene::SetParent(GameObject* obj, GameObject* parent) {
     bool result = false;
     auto currentParent = obj->GetParent();
@@ -201,6 +214,16 @@ void Scene::LoadObject(const nlohmann::json& jsonObject, GameObject* parent) {
     GameObject* gameObject = nullptr;
     if (jsonObject.contains("type")) {
         const std::string type = jsonObject.value("type", "");
+        if (type == "gltf") {
+            std::string path = jsonObject.value("path", "");
+            gameObject = GameObject::LoadGLTF(path, this);
+            if (gameObject) {
+                gameObject->SetParent(parent);
+                gameObject->SetName(name);
+            }
+        } else {
+            gameObject = CreateObject(type, name, parent);
+        }
     } else {
         gameObject = CreateObject(name, parent);
     }
@@ -238,6 +261,8 @@ void Scene::LoadObject(const nlohmann::json& jsonObject, GameObject* parent) {
         gameObject->SetScale(scale);
     }
 
+    gameObject->LoadProperties(jsonObject);
+
     if (jsonObject.contains("components") && jsonObject["components"].is_array()) {
         const auto& components = jsonObject["components"];
         for (const auto& comp : components) {
@@ -249,6 +274,15 @@ void Scene::LoadObject(const nlohmann::json& jsonObject, GameObject* parent) {
             }
         }
     }
+
+    if (jsonObject.contains("children") && jsonObject["children"].is_array()) {
+        const auto& children = jsonObject["children"];
+        for (const auto& child : children) {
+            LoadObject(child, gameObject);
+        }
+    }
+
+    gameObject->Init();
 }
 
 }
