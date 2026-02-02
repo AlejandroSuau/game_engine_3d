@@ -106,14 +106,7 @@ public:
         m_creators.emplace(name, std::make_unique<ObjectCreator<T>>());
     }
 
-    GameObject* CreateGameObject(const std::string& typeName) {
-        auto it = m_creators.find(typeName);
-        if (it == m_creators.end()) {
-            return nullptr;
-        }
-
-        return it->second->CreateGameObject();
-    }
+    GameObject* CreateGameObject(const std::string& typeName);
 
 private:
     std::unordered_map<std::string, std::unique_ptr<ObjectCreatorBase>> m_creators;

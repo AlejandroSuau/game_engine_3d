@@ -42,10 +42,10 @@ GameObject* Scene::CreateObject(const std::string& name, GameObject* parent) {
     return obj;
 }
 
-GameObject* Scene::CreateObject(const std::string& type, const std::string& name, GameObject* parent = nullptr) {
+GameObject* Scene::CreateObject(const std::string& type, const std::string& name, GameObject* parent) {
     auto obj = GameObjectFactory::GetInstance().CreateGameObject(type);
     if (!obj) {
-        return;
+        return nullptr;
     }
 
     obj->SetName(name);
