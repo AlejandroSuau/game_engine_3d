@@ -3,6 +3,7 @@
 #include "scene/components/AnimationComponent.hpp"
 #include "scene/components/CameraComponent.hpp"
 #include "scene/components/LightComponent.hpp"
+#include "scene/components/MeshComponent.hpp"
 #include "scene/components/PhysicsComponent.hpp"
 #include "scene/components/PlayerControllerComponent.hpp"
 #include "Engine.hpp"
@@ -14,6 +15,7 @@ void Scene::RegisterTypes() {
     AnimationComponent::Register();
     CameraComponent::Register();
     LightComponent::Register();
+    MeshComponent::Register();
     PhysicsComponent::Register();
     PlayerControllerComponent::Register();
 }
