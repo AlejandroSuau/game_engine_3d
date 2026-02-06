@@ -9,7 +9,7 @@
 namespace eng
 {
 
-KinematicCharacterController::KinematicCharacterController(float radius, float height) 
+KinematicCharacterController::KinematicCharacterController(float radius, float height, const glm::vec3& position) 
     : m_radius(radius), m_height(height) {
 
     auto world = Engine::GetInstance().GetPhysicsManager().GetWorld();
@@ -18,7 +18,7 @@ KinematicCharacterController::KinematicCharacterController(float radius, float h
     m_ghost = std::make_unique<btPairCachingGhostObject>();
     btTransform start;
     start.setIdentity();
-    start.setOrigin(btVector3(0.f, 2.f, 0.f));
+    start.setOrigin(btVector3(position.x, position.y, position.z));
     m_ghost->setWorldTransform(start);
     m_ghost->setCollisionShape(capsule);
     m_ghost->setCollisionFlags(m_ghost->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);

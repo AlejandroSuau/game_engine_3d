@@ -6,11 +6,14 @@
 #include <iostream>
 #include <string>
 
-void Game::RegisterTypes() {
+void Game::RegisterTypes()
+{
     Player::Register();
 }
 
-bool Game::Init() {
+bool Game::Init()
+{
+#if 0
     auto& fs = eng::Engine::GetInstance().GetFileSystem();
     auto texture = eng::Texture::Load("brick.png");
 
@@ -45,7 +48,7 @@ bool Game::Init() {
     // suzanneObj->AddComponent(new eng::MeshComponent(suzanneMaterial, suzanneMesh));
     // suzanneObj->SetPosition(glm::vec3(0.f, 0.f, -5.f));
 
-    auto suzanneObj = eng::GameObject::LoadGLTF("models/suzanne/Suzanne.gltf");
+    auto suzanneObj = eng::GameObject::LoadGLTF("models/suzanne/Suzanne.gltf", m_scene);
     suzanneObj->SetPosition(glm::vec3(0.f, 0.f, -5.f));
 
     
@@ -77,15 +80,24 @@ bool Game::Init() {
         eng::BodyType::Dynamic, boxCollider, 5.f, 0.5f
     );
     boxObj->AddComponent(new eng::PhysicsComponent(boxBody));
+#endif
+
+    m_scene = eng::Scene::Load("scenes/scene.sc");
+    eng::Engine::GetInstance().SetScene(m_scene.get());
 
     return true;
 }
 
-void Game::Update(float deltaTime) {
-   m_scene->Update(deltaTime);
+void Game::Update(float deltaTime)
+{
+    if (!m_scene) {
+        std::cout << "[INFO] -- No scene available\n";
+        return;
+    }
+
+    m_scene->Update(deltaTime);
 }
 
-
-void Game::Destroy() {
-
+void Game::Destroy()
+{
 }

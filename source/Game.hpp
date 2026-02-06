@@ -12,5 +12,5 @@ public:
     void Destroy() override;
 
 private:
-    eng::Scene* m_scene {nullptr};
+    std::shared_ptr<eng::Scene> m_scene;
 };

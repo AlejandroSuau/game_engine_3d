@@ -193,6 +193,16 @@ std::shared_ptr<Scene> Scene::Load(const std::string& path) {
         }
     }
 
+    if (json.contains("camera")) {
+        std::string cameraObjName = json.value("camera", "");
+        for (const auto& child : result->m_objects) {
+            if (auto object = child->FindChildByName(cameraObjName)) {
+                result->SetMainCamera(object);
+                break;
+            }
+        }
+    }
+
     return result;
 }
 

@@ -9,6 +9,52 @@ namespace eng
 PhysicsComponent::PhysicsComponent(const std::shared_ptr<RigidBody>& body)
     : m_rigidBody(body) {}
 
+void PhysicsComponent::LoadProperties(const nlohmann::json& json) {
+    std::shared_ptr<Collider> collider;
+    if (json.contains("collider")) {
+        const auto& colliderObj = json["collider"];
+        std::string type = colliderObj.value("type", "");
+        if (type == "box") {
+            const glm::vec3 extents(
+                colliderObj.value("x", 1.f),
+                colliderObj.value("y", 1.f),
+                colliderObj.value("z", 1.f));
+            collider = std::make_shared<BoxCollider>(extents);
+        } else if (type == "sphere") {
+            const float radius = colliderObj.value("r", 1.f);
+            collider = std::make_shared<SphereCollider>(radius);
+        } else if (type == "capsule") {
+            const float radius = colliderObj.value("r", 1.f);
+            const float height = colliderObj.value("h", 1.f);
+            collider = std::make_shared<CapsuleCollider>(radius, height);
+        } else {
+            return;
+        }
+
+        std::shared_ptr<RigidBody> rigidBody;
+        if (json.contains("body")) {
+            const auto& bodyObj = json["body"];
+
+            const float mass = bodyObj.value("mass", 0.f);
+            const float friction = bodyObj.value("friction", 0.5f);
+            std::string typeStr = bodyObj.value("type", "static");
+
+            BodyType type = BodyType::Static;
+            if (typeStr == "dynamic") {
+                type = BodyType::Dynamic;
+            } else if (typeStr == "kinematic") {
+                type = BodyType::Kinematic;
+            }
+
+            rigidBody = std::make_shared<RigidBody>(type, collider, mass, friction);
+        }
+
+        if (rigidBody) {
+            SetRigidBody(rigidBody);
+        }
+    }
+}
+
 void PhysicsComponent::Init() {
     if (!m_rigidBody) {
         return;

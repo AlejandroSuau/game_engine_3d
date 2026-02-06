@@ -24,7 +24,7 @@ std::filesystem::path FileSystem::GetExecutableFolder() const {
     return std::filesystem::path(buf).remove_filename();
 #elif defined (__APPLE__)
     uint32_t size = 0;
-    _NSGetExecutablePath(NULL, &size);
+    _NSGetExecutablePath(NULL, &size);  
     std::string tmp(size, '\0');
     _NSGetExecutablePath(tmp.data(), &size);
     return std::filesystem::weakly_canonical(std::filesystem::path(tmp)).remove_filename();
