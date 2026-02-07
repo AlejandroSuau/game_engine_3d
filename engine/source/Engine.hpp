@@ -6,6 +6,7 @@
 #include "render/RenderQueue.hpp"
 #include "io/FileSystem.hpp"
 #include "physics/PhysicsManager.hpp"
+#include "audio/AudioManager.hpp"
 
 #include <memory>
 #include <chrono>
@@ -33,6 +34,7 @@ public:
     FileSystem& GetFileSystem();
     TextureManager& GetTextureManager();
     PhysicsManager& GetPhysicsManager();
+    AudioManager& GetAudioManager();
 
     void SetScene(Scene* scene);
     Scene* GetScene();
@@ -53,6 +55,7 @@ private:
     FileSystem m_fileSystem;
     TextureManager m_textureManager;
     PhysicsManager m_physicsManager;
+    AudioManager m_audioManager;
     std::unique_ptr<Scene> m_currentScene;
 };
 

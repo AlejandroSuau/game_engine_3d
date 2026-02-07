@@ -6,6 +6,8 @@
 #include "scene/components/MeshComponent.hpp"
 #include "scene/components/PhysicsComponent.hpp"
 #include "scene/components/PlayerControllerComponent.hpp"
+#include "scene/components/AudioComponent.hpp"
+#include "scene/components/AudioListenerComponent.hpp"
 #include "Engine.hpp"
 
 namespace eng
@@ -18,6 +20,8 @@ void Scene::RegisterTypes() {
     MeshComponent::Register();
     PhysicsComponent::Register();
     PlayerControllerComponent::Register();
+    AudioComponent::Register();
+    AudioListenerComponent::Register();
 }
 
 void Scene::Update(float deltaTime) {

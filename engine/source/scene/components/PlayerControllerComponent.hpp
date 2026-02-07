@@ -14,6 +14,7 @@ class PlayerControllerComponent : public Component {
 public:
     void Init() override;
     void Update(float deltaTime) override;
+    bool OnGround() const;
 
 private:
     float m_mouseSensitivity {4.5f};

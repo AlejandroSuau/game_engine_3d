@@ -72,4 +72,8 @@ void PlayerControllerComponent::Update(float deltaTime) {
     m_owner->SetPosition(m_kinematicController->GetPosition());
 }
 
+bool PlayerControllerComponent::OnGround() const {
+    return (m_kinematicController) ? m_kinematicController->OnGround() : false;
+}
+
 }

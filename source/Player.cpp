@@ -12,8 +12,11 @@ void Player::Init() {
     }
 
     if (auto gun = FindChildByName("Gun")) {
-        m_animationComponent = GetComponent<eng::AnimationComponent>();
+        m_animationComponent = gun->GetComponent<eng::AnimationComponent>();
     }
+
+    m_audioComponent = GetComponent<eng::AudioComponent>();
+    m_playerControllerComponent = GetComponent<eng::PlayerControllerComponent>();
 }
 
 void Player::Update(float deltaTime) {
@@ -23,6 +26,34 @@ void Player::Update(float deltaTime) {
     if (input.IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
         if (m_animationComponent && !m_animationComponent->IsPlaying()) {
             m_animationComponent->Play("shoot", false);
+
+            if (m_audioComponent) {
+                if (m_audioComponent->IsPlaying("shoot")) {
+                    m_audioComponent->Stop("shoot");
+                }
+                m_audioComponent->Play("shoot");
+            }
+        }
+    }
+
+    if (input.IsKeyPressed(GLFW_KEY_SPACE)) {
+        if (m_audioComponent && !m_audioComponent->IsPlaying("jump")) {
+            m_audioComponent->Play("jump");
+        }
+    }
+
+    bool isWalking = (
+        input.IsKeyPressed(GLFW_KEY_W) || 
+        input.IsKeyPressed(GLFW_KEY_A) ||
+        input.IsKeyPressed(GLFW_KEY_S) ||
+        input.IsKeyPressed(GLFW_KEY_D));
+    if (isWalking && m_playerControllerComponent && m_playerControllerComponent->OnGround()) {
+        if (m_audioComponent && !m_audioComponent->IsPlaying("step")) {
+            m_audioComponent->Play("step", true);
+        }
+    } else {
+        if (m_audioComponent && m_audioComponent->IsPlaying("step")) {
+            m_audioComponent->Stop("step");
         }
     }
 }

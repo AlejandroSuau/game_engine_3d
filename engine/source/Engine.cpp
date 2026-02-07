@@ -95,6 +95,7 @@ bool Engine::Init(int width, int height) {
 
     m_graphicsAPI.Init();
     m_physicsManager.Init();
+    m_audioManager.Init();
 
     return m_application->Init();
 }
@@ -187,6 +188,10 @@ TextureManager& Engine::GetTextureManager() {
 
 PhysicsManager& Engine::GetPhysicsManager() {
     return m_physicsManager;
+}
+
+AudioManager& Engine::GetAudioManager() {
+    return m_audioManager;
 }
 
 void Engine::SetScene(Scene* scene) {

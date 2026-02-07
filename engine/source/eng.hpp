@@ -18,5 +18,7 @@
 #include "scene/components/LightComponent.hpp"
 #include "scene/components/AnimationComponent.hpp"
 #include "scene/components/PhysicsComponent.hpp"
+#include "scene/components/AudioComponent.hpp"
+#include "scene/components/AudioListenerComponent.hpp"
 #include "io/FileSystem.hpp"
 #include "EngineCommon.hpp"
