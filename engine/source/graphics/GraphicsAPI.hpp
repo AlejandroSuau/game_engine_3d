@@ -25,6 +25,7 @@ public:
     void BindShaderProgram(ShaderProgram* shaderProgram);
     void BindMaterial(Material* material);
     void BindMesh(Mesh* mesh);
+    void UnbindMesh(Mesh* mesh);
     void DrawMesh(Mesh* mesh);
     GLuint CreateVertexBuffer(const std::vector<float>& vertices);
     GLuint CreateIndexBuffer(const std::vector<uint32_t>& indices);

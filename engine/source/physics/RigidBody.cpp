@@ -75,14 +75,14 @@ void RigidBody::SetPosition(const glm::vec3& pos) {
 }
 
 glm::vec3 RigidBody::GetPosition() const {
+    if (!m_body) { return glm::vec3(0.f, 0.f, 0.f); }
+
     const auto& pos = m_body->getWorldTransform().getOrigin();
     return glm::vec3(pos.x(), pos.y(), pos.z());
 }
 
 void RigidBody::SetRotation(const glm::quat& rot) {
-    if (!m_body) {
-        return;
-    }
+    if (!m_body) { return; }
 
     auto& tr = m_body->getWorldTransform();
     tr.setRotation(btQuaternion(btScalar(rot.x), btScalar(rot.y), btScalar(rot.z), btScalar(rot.w)));
@@ -94,8 +94,18 @@ void RigidBody::SetRotation(const glm::quat& rot) {
 }
 
 glm::quat RigidBody::GetRotation() const {
+    if (!m_body) { return glm::quat(1.f, 0.f, 0.f, 0.f); }
+
     const auto& rot = m_body->getWorldTransform().getRotation();
     return glm::quat(rot.w(), rot.x(), rot.y(), rot.z());
+}
+
+void RigidBody::ApplyImpulse(const glm::vec3& impulse) {
+    if (!m_body) { return; }
+
+    m_body->applyCentralImpulse(btVector3(
+        btScalar(impulse.x), btScalar(impulse.y),btScalar(impulse.z)
+    ));
 }
 
 }

@@ -25,6 +25,19 @@ void Scene::RegisterTypes() {
 }
 
 void Scene::Update(float deltaTime) {
+    m_objects.erase(
+        std::remove_if(
+            m_objects.begin(),
+            m_objects.end(),
+            [](const std::unique_ptr<GameObject>& obj) { return !obj->IsAlive(); }),
+        m_objects.end());
+    
+    for (auto& obj : m_objectsToAdd) {
+        SetParent(obj.first, obj.second);
+    }
+    m_objectsToAdd.clear();
+    
+    m_isUpdating = true;
     for (auto it = m_objects.begin(); it != m_objects.end();) {
         if ((*it)->IsAlive()) {
             (*it)->Update(deltaTime);
@@ -32,7 +45,8 @@ void Scene::Update(float deltaTime) {
         } else {
             it = m_objects.erase(it);
         }
-    }    
+    }
+    m_isUpdating = false;
 }
 
 void Scene::Clear() {
@@ -43,7 +57,12 @@ GameObject* Scene::CreateObject(const std::string& name, GameObject* parent) {
     auto obj = new GameObject();
     obj->SetName(name);
     obj->m_scene = this;
-    SetParent(obj, parent);
+    
+    if (m_isUpdating) {
+        m_objectsToAdd.push_back({obj, parent});
+    } else {
+        SetParent(obj, parent);
+    }  
 
     return obj;
 }
@@ -56,7 +75,12 @@ GameObject* Scene::CreateObject(const std::string& type, const std::string& name
 
     obj->SetName(name);
     obj->m_scene = this;
-    SetParent(obj, parent);
+
+    if (m_isUpdating) {
+        m_objectsToAdd.push_back({obj, parent});
+    } else {
+        SetParent(obj, parent);
+    }  
 
     return obj;
 }

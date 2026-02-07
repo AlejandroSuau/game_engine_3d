@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <utility>
 
 namespace eng
 {
@@ -27,7 +28,12 @@ public:
         auto obj = new T();
         obj->m_scene = this;
         obj->SetName(name);
-        SetParent(obj, parent);
+        
+        if (m_isUpdating) {
+            m_objectsToAdd.push_back({obj, parent});
+        } else {
+            SetParent(obj, parent);
+        }       
 
         return obj;
     }
@@ -41,7 +47,9 @@ public:
 
 private:
     std::vector<std::unique_ptr<GameObject>> m_objects;
+    std::vector<std::pair<GameObject*, GameObject*>> m_objectsToAdd;
     GameObject* m_mainCamera {nullptr};
+    bool m_isUpdating {false};
 
     void CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out);
     void LoadObject(const nlohmann::json& jsonObject, GameObject* parent);

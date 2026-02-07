@@ -34,6 +34,8 @@ public:
     void SetRotation(const glm::quat& rot);    
     glm::quat GetRotation() const;
 
+    void ApplyImpulse(const glm::vec3& impulse);
+
 private:
     std::unique_ptr<btRigidBody> m_body;
     BodyType m_type = BodyType::Static;

@@ -89,6 +89,12 @@ void GraphicsAPI::BindMesh(Mesh* mesh) {
     mesh->Bind();
 }
 
+void GraphicsAPI::UnbindMesh(Mesh* mesh) {
+    if (!mesh) return;
+    
+    mesh->Unbind();
+}
+
 void GraphicsAPI::DrawMesh(Mesh* mesh) {
     if (!mesh) return;
     

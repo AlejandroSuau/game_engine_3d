@@ -32,6 +32,7 @@ void RenderQueue::Draw(
 
         graphicsAPI.BindMesh(command.mesh);
         graphicsAPI.DrawMesh(command.mesh);
+        graphicsAPI.UnbindMesh(command.mesh);
     }
 
     m_commands.clear();
