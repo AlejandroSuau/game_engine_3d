@@ -68,17 +68,13 @@ std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(
 }
 
 void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram) {
-    if (!shaderProgram) {
-        return;
-    }
+    if (!shaderProgram) return;
 
     shaderProgram->Bind();
 }
 
 void GraphicsAPI::BindMaterial(Material* material) {
-    if (!material) {
-        return;
-    }
+    if (!material) return;
 
     material->Bind();
 }
@@ -122,10 +118,8 @@ const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefaultShaderProgram() {
             void main()
             {
                 vUV = uv;
-
+                vNormal = normalize(transpose(inverse(mat3(uModel))) * normal);
                 vFragPos = vec3(uModel * vec4(position, 1.0));
-                vNormal = mat3(transpose(inverse(uModel))) * normal;
-
                 gl_Position = uProjection * uView * uModel * vec4(position, 1.0);
             }
         )";
@@ -135,7 +129,7 @@ const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefaultShaderProgram() {
             struct Light
             {
                 vec3 color;
-                vec3 position;
+                vec3 direction;
             };
 
             uniform Light uLight;
@@ -154,7 +148,7 @@ const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefaultShaderProgram() {
                 vec3 norm = normalize(vNormal);
 
                 // diffuse
-                vec3 lightDir = normalize(uLight.position - vFragPos);
+                vec3 lightDir = normalize(-uLight.direction);
                 float diff = max(dot(norm, lightDir), 0.0);
                 vec3 diffuse = diff * uLight.color;
 
@@ -165,7 +159,11 @@ const std::shared_ptr<ShaderProgram>& GraphicsAPI::GetDefaultShaderProgram() {
                 float specularStrength = 0.5;
                 vec3 specular = specularStrength * spec * uLight.color;
 
-                vec3 result = diffuse + specular;
+                // ambient
+                const float ambientStrength = 0.4;
+                vec3 ambient = ambientStrength * uLight.color;
+
+                vec3 result = diffuse + specular + ambient;
 
                 vec4 texColor = texture(baseColorTexture, vUV);
                 FragColor = texColor * vec4(result, 1.0);

@@ -24,6 +24,10 @@ void Material::SetParam(const std::string& name, float v0, float v1) {
     m_float2Params[name] = {v0, v1};
 }
 
+void Material::SetParam(const std::string& name, const glm::vec3& value) {
+    m_float3Params[name] = value;
+}
+
 void Material::SetParam(const std::string& name, std::shared_ptr<Texture>& texture) {
     m_textures[name] = texture;
 }
@@ -40,6 +44,10 @@ void Material::Bind() {
 
     for (auto& param : m_float2Params) {
         m_shaderProgram->SetUniform(param.first, param.second.first, param.second.second);
+    }
+
+    for (auto& param : m_float3Params) {
+        m_shaderProgram->SetUniform(param.first, param.second);
     }
 
     for (auto& param : m_textures) {
@@ -73,6 +81,7 @@ std::shared_ptr<Material> Material::Load(const std::string& path) {
 
         result = std::make_shared<Material>();
         result->SetShaderProgram(shaderProgram);
+        result->SetParam("color", glm::vec3(1.f, 1.f, 1.f));
     }
 
     if (json.contains("params")) {
@@ -94,6 +103,17 @@ std::shared_ptr<Material> Material::Load(const std::string& path) {
                 float v0 = p.value("value0", 0.f);
                 float v1 = p.value("value1", 0.f);
                 result->SetParam(name, v0, v1);
+            }
+        }
+
+        // Float3
+        if (paramsObj.contains("float3")) {
+            for (auto& p : paramsObj["float3"]) {
+                std::string name = p.value("name", "");
+                float v0 = p.value("value0", 0.f);
+                float v1 = p.value("value1", 0.f);
+                float v2 = p.value("value2", 0.f);
+                result->SetParam(name, glm::vec3(v0, v1, v2));
             }
         }
 

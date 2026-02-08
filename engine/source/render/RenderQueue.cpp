@@ -27,7 +27,7 @@ void RenderQueue::Draw(
         if (!lights.empty()) {
             auto& light = lights[0];
             shaderProgram->SetUniform("uLight.color", light.color);
-            shaderProgram->SetUniform("uLight.position", light.position);
+            shaderProgram->SetUniform("uLight.direction", glm::normalize(-light.position));
         }
 
         graphicsAPI.BindMesh(command.mesh);

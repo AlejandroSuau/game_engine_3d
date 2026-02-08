@@ -3,10 +3,12 @@
 struct Light
 {
     vec3 color;
-    vec3 position;
+    vec3 direction;
 };
 
 uniform Light uLight;
+uniform vec3 uCameraPos;
+uniform vec3 color;
 
 out vec4 FragColor;
 
@@ -20,12 +22,24 @@ void main()
 {
     vec3 norm = normalize(vNormal);
 
-    vec3 lightDir = normalize(uLight.position - vFragPos);
-
+    // diffuse
+    vec3 lightDir = normalize(-uLight.direction);
     float diff = max(dot(norm, lightDir), 0.0);
-
     vec3 diffuse = diff * uLight.color;
 
+    // specular
+    vec3 viewDir = normalize(uCameraPos - vFragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0); // 128 plastic, 8 wood
+    float specularStrength = 0.5;
+    vec3 specular = specularStrength * spec * uLight.color;
+
+    // ambient
+    const float ambientStrength = 0.4;
+    vec3 ambient = ambientStrength * uLight.color;
+    
     vec4 texColor = texture(baseColorTexture, vUV);
-    FragColor = texColor * vec4(diffuse, 1.0);
+    vec3 result = (diffuse + specular + ambient) * texColor.xyz * color;
+
+    FragColor = vec4(result, 1.0);
 }
