@@ -8,6 +8,7 @@
 #include "scene/components/PlayerControllerComponent.hpp"
 #include "scene/components/AudioComponent.hpp"
 #include "scene/components/AudioListenerComponent.hpp"
+#include "scene/components/SpriteComponent.hpp"
 #include "Engine.hpp"
 
 namespace eng
@@ -22,6 +23,7 @@ void Scene::RegisterTypes() {
     PlayerControllerComponent::Register();
     AudioComponent::Register();
     AudioListenerComponent::Register();
+    SpriteComponent::Register();
 }
 
 void Scene::Update(float deltaTime) {

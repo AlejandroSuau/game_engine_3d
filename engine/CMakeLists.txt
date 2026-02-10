@@ -53,6 +53,8 @@ set(PROJECT_SOURCE_FILES
     source/scene/components/AudioComponent.cpp
     source/scene/components/AudioListenerComponent.hpp
     source/scene/components/AudioListenerComponent.cpp
+    source/scene/components/SpriteComponent.hpp
+    source/scene/components/SpriteComponent.cpp
     source/io/FileSystem.hpp
     source/io/FileSystem.cpp
     source/physics/PhysicsManager.hpp
@@ -63,6 +65,8 @@ set(PROJECT_SOURCE_FILES
     source/physics/RigidBody.cpp
     source/physics/KinematicCharacterController.hpp
     source/physics/KinematicCharacterController.cpp
+    source/physics/CollisionObject.hpp
+    source/physics/CollisionObject.cpp
     source/audio/AudioManager.hpp
     source/audio/AudioManager.cpp    
     source/audio/Audio.hpp

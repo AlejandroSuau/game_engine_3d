@@ -2,6 +2,7 @@
 
 #include "scene/Component.hpp"
 
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -49,19 +50,28 @@ public:
     
     const glm::vec3& GetPosition() const;
     glm::vec3 GetWorldPosition() const;
+    glm::vec2 GetPosition2D() const;
+    glm::vec2 GetWorldPosition2D() const;
     void SetPosition(const glm::vec3& position);
     void SetWorldPosition(const glm::vec3& position);
+    void SetPosition2D(const glm::vec2& pos);
     
     const glm::quat& GetRotation() const;
+    float GetRotation2D() const;
     glm::quat GetWorldRotation();
     void SetRotation(const glm::quat& rotation);
     void SetWorldRotation(const glm::quat& rotation);
+    void SetRotation2D(float rotation);
     
     const glm::vec3& GetScale() const;
+    glm::vec2 GetScale2D() const;
     void SetScale(const glm::vec3& scale);
+    void SetScale2D(const glm::vec2& scale);
 
     glm::mat4 GetLocalTransform() const;
+    glm::mat4 GetLocalTransform2D() const;
     glm::mat4 GetWorldTransform() const;
+    glm::mat4 GetWorldTransform2D() const;
 
     static GameObject* LoadGLTF(const std::string& path, Scene* gameScene);
 

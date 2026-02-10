@@ -1,6 +1,7 @@
 #pragma once
 
 #include "physics/Collider.hpp"
+#include "physics/CollisionObject.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -18,7 +19,7 @@ enum class BodyType {
     Kinematic
 };
 
-class RigidBody {
+class RigidBody : public CollisionObject {
 public:
     RigidBody(BodyType type, const std::shared_ptr<Collider>& collider, float mass, float friction);
     ~RigidBody();

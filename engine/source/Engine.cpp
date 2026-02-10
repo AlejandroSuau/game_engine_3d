@@ -96,6 +96,7 @@ bool Engine::Init(int width, int height) {
     m_graphicsAPI.Init();
     m_physicsManager.Init();
     m_audioManager.Init();
+    m_renderQueue.Init();
 
     return m_application->Init();
 }
@@ -134,6 +135,9 @@ void Engine::Run() {
                 if (cameraComponent) {
                     cameraData.viewMatrix = cameraComponent->GetViewMatrix();
                     cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspectRatio);
+                    cameraData.orthoMatrix = glm::ortho(
+                        0.f, static_cast<float>(width),
+                        0.f, static_cast<float>(height));
                     cameraData.position = cameraObject->GetWorldPosition();
                 }
             }

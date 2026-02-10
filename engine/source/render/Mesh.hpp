@@ -28,6 +28,7 @@ public:
 
     static std::shared_ptr<Mesh> CreateBox(const glm::vec3& extents = glm::vec3(1.f));
     static std::shared_ptr<Mesh> CreateSphere(float radius, int sectors, int stacks);
+    static  std::shared_ptr<Mesh> CreatePlane();
     
 private:
     VertexLayout m_vertexLayout;
