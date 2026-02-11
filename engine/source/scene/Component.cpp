@@ -5,13 +5,11 @@ namespace eng
 
 std::size_t Component::nextId = 1;
 
- void Component::LoadProperties(const nlohmann::json& json) {
+ void Component::LoadProperties(const nlohmann::json& json) {}
 
-}
+void Component::Init() {}
 
-void Component::Init() {
-    
-}
+void Component::Update(float deltaTime) {}
 
 GameObject* Component::GetOwner() {
     return m_owner;
@@ -29,6 +27,23 @@ Component* ComponentFactory::CreateComponent(const std::string& name) {
     }
 
     return it->second->CreateComponent();
+}
+
+
+bool ComponentFactory::HasParent(std::size_t objectType, std::size_t parentType) {
+    auto record = m_parentMap.find(objectType);
+    if (record == m_parentMap.end()) { return false; }
+
+    auto& parents = record->second;
+    if (std::find(parents.begin(), parents.end(), parentType) != parents.end()) {
+        return true;
+    }
+
+    for (auto p : parents) {
+        if (HasParent(p, parentType)) { return true; }
+    }
+
+    return false;
 }
 
 }

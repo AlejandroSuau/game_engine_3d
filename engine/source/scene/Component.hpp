@@ -17,7 +17,7 @@ public:
     virtual ~Component() = default;
     virtual void LoadProperties(const nlohmann::json& json);
     virtual void Init();
-    virtual void Update(float deltaTime) = 0;
+    virtual void Update(float deltaTime);
     virtual std::size_t GetTypeId() const = 0;
 
     GameObject* GetOwner();
@@ -58,12 +58,21 @@ public:
     template<typename T>
     void RegisterComponent(const std::string& name) {
         m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
+       // m_parentMap[T::TypeId()].push_back(Component::StaticTypeId<Component>());
+    }
+
+    template<typename T, typename ParentType>
+    void RegisterComponent(const std::string& name) {
+        m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
+        //m_parentMap[T::TypeId()].push_back(Component::StaticTypeId<ParentType>());
     }
 
     Component* CreateComponent(const std::string& name);
+    bool HasParent(std::size_t objectType, std::size_t parentType);
 
 private:
     std::unordered_map<std::string, std::unique_ptr<ComponentCreatorBase>> m_creators;
+    std::unordered_map<std::size_t, std::vector<std::size_t>> m_parentMap;
 };
 
 #define COMPONENT(ComponentClass) \
@@ -71,4 +80,10 @@ public: \
     static std::size_t TypeId() { return eng::Component::StaticTypeId<ComponentClass>(); } \
     std::size_t GetTypeId() const override { return TypeId(); } \
     static void Register() { eng::ComponentFactory::GetInstance().RegisterComponent<ComponentClass>(std::string(#ComponentClass)); }
+
+#define COMPONENT_2(ComponentClass, ParentComponentClass) \
+public: \
+    static std::size_t TypeId() { return eng::Component::StaticTypeId<ComponentClass>(); } \
+    std::size_t GetTypeId() const override { return TypeId(); } \
+    static void Register() { eng::ComponentFactory::GetInstance().RegisterComponent<ComponentClass, ParentComponentClass>(std::string(#ComponentClass)); }
 }

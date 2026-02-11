@@ -55,6 +55,12 @@ set(PROJECT_SOURCE_FILES
     source/scene/components/AudioListenerComponent.cpp
     source/scene/components/SpriteComponent.hpp
     source/scene/components/SpriteComponent.cpp
+    source/scene/components/ui/UIElementComponent.hpp
+    source/scene/components/ui/UIElementComponent.cpp
+    source/scene/components/ui/CanvasComponent.hpp
+    source/scene/components/ui/CanvasComponent.cpp
+    source/scene/components/ui/TextComponent.hpp
+    source/scene/components/ui/TextComponent.cpp
     source/io/FileSystem.hpp
     source/io/FileSystem.cpp
     source/physics/PhysicsManager.hpp
