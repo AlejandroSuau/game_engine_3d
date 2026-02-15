@@ -58,13 +58,13 @@ public:
     template<typename T>
     void RegisterComponent(const std::string& name) {
         m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
-       // m_parentMap[T::TypeId()].push_back(Component::StaticTypeId<Component>());
+        m_parentMap[T::TypeId()].push_back(Component::StaticTypeId<Component>());
     }
 
     template<typename T, typename ParentType>
     void RegisterComponent(const std::string& name) {
         m_creators.emplace(name, std::make_unique<ComponentCreator<T>>());
-        //m_parentMap[T::TypeId()].push_back(Component::StaticTypeId<ParentType>());
+        m_parentMap[T::TypeId()].push_back(Component::StaticTypeId<ParentType>());
     }
 
     Component* CreateComponent(const std::string& name);

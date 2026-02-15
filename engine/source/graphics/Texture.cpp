@@ -76,6 +76,15 @@ GLuint Texture::GetID() const {
     return m_textureID;
 }
 
+int Texture::GetWidth() const {
+    return m_width;
+}
+
+int Texture::GetHeight() const {
+    return m_height;
+}
+
+
 std::shared_ptr<Texture> TextureManager::GetOrLoadTexture(const std::string& path) {
     auto it = m_textures.find(path);
     if (it == m_textures.end()) {

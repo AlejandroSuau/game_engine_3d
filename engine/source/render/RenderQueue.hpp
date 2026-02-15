@@ -14,6 +14,7 @@ class Mesh;
 class Material;
 class GraphicsAPI;
 class Texture;
+class ShaderProgram;
 
 struct RenderCommand
 {
@@ -32,12 +33,21 @@ struct RenderCommand2D {
     glm::vec2 pivot;
 };
 
+struct RenderCommandUI {
+    Mesh* mesh {nullptr};
+    ShaderProgram* shaderProgram {nullptr};
+    std::size_t screenWidth;
+    std::size_t screenHeight;
+    std::vector<UIBatch> batches;
+};
+
 class RenderQueue
 {
 public:
     void Init();
     void Submit(const RenderCommand& command);
     void Submit(const RenderCommand2D& command);
+    void Submit(const RenderCommandUI& command);
     void Draw(
         GraphicsAPI& graphicsAPI,
         const CameraData& cameraData,
@@ -46,6 +56,7 @@ public:
 private:
     std::vector<RenderCommand> m_commands;
     std::vector<RenderCommand2D> m_commands2D;
+    std::vector<RenderCommandUI> m_commandsUI;
     std::shared_ptr<Mesh> m_mesh2D;
 };
 

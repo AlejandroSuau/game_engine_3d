@@ -1,12 +1,70 @@
 #include "scene/components/ui/TextComponent.hpp"
 
+#include "Engine.hpp"
+#include "font/Font.hpp"
+#include "scene/components/ui/CanvasComponent.hpp"
+#include "scene/GameObject.hpp"
+
 #include <string>
 
 namespace eng
 {
 
-void TextComponent::Render(CanvasComponent* element) {
+void TextComponent::LoadProperties(const nlohmann::json& json) {
+    const std::string text = json.value("text", "");
+    SetText(text);
 
+    if (json.contains("font")) {
+        const auto& fontObj = json["font"];
+        std::string path = fontObj.value("path", "");
+        int fontSize = fontObj.value("size", 12);
+        SetFont(path, fontSize);
+    }
+
+    if (json.contains("color")) {
+        const auto& colorObj = json["color"];
+        glm::vec4 color(
+            colorObj.value("r", 1.f),
+            colorObj.value("g", 1.f),
+            colorObj.value("b", 1.f),
+            colorObj.value("a", 1.f));
+        SetColor(color);
+    }
+}
+
+void TextComponent::Render(CanvasComponent* canvas) {
+    if (m_text.empty() || !m_font || !canvas) { return; }
+
+    int width = m_font->GetTexture()->GetWidth();
+    int height = m_font->GetTexture()->GetHeight();
+
+    auto pos = GetPivotPos();
+    float xOrigin = pos.x;
+    float yOrigin = pos.y;
+
+    for (const auto c : m_text) {
+        const auto& desc = m_font->GetGlyphDescription(c);
+
+        float x1 = static_cast<float>(xOrigin);
+        float y1 = static_cast<float>(yOrigin);
+        float x2 = static_cast<float>(xOrigin + desc.width);
+        float y2 = static_cast<float>(yOrigin + desc.height);
+
+        float u1 = static_cast<float>(desc.x0) / static_cast<float>(width);
+        float v1 = static_cast<float>(desc.y0) / static_cast<float>(height);
+        float u2 = static_cast<float>(desc.x1) / static_cast<float>(width);
+        float v2 = static_cast<float>(desc.y1) / static_cast<float>(height);
+
+        xOrigin += desc.advance;
+
+        // why v1 & v2 swap. Because by convention many UI systems uses origin as top left.
+        // while our is using bottom left.
+        canvas->DrawRect(
+            glm::vec2(x1, y1), glm::vec2(x2, y2),
+            glm::vec2(u1, v2), glm::vec2(u2, v1),
+            m_font->GetTexture().get(), m_color
+        );
+    }
 }
 
 void TextComponent::SetText(const std::string& text) {
@@ -15,6 +73,41 @@ void TextComponent::SetText(const std::string& text) {
 
 const std::string& TextComponent::GetText() const {
     return m_text;
+}
+
+const glm::vec4& TextComponent::GetColor() const {
+    return m_color;
+}
+
+void TextComponent::SetColor(const glm::vec4& color) {
+    m_color = color;
+}
+
+const std::shared_ptr<Font>& TextComponent::GetFont() const {
+    return m_font;
+}
+
+void TextComponent::SetFont(const std::shared_ptr<Font>& font) {
+    m_font = font;
+}
+
+void TextComponent::SetFont(const std::string& path, int size) {
+    m_font = Engine::GetInstance().GetFontManager().GetFont(path, size);
+}
+
+glm::vec2 TextComponent::GetPivotPos() const {
+    auto pos = m_owner->GetWorldPosition2D();
+    
+    glm::vec2 rect(0.f);
+    for (const auto c : m_text) {
+        const auto& d = m_font->GetGlyphDescription(c);
+        rect.x += static_cast<float>(d.advance);
+        rect.y = std::max(rect.y, static_cast<float>(d.height));
+    }
+
+    pos.x -= std::round(rect.x * m_pivot.x);
+    pos.y -= std::round(rect.y * m_pivot.y);
+    return pos;
 }
 
 }

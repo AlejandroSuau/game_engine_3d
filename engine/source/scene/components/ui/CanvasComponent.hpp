@@ -1,17 +1,43 @@
 #pragma once
 
+#include "EngineCommon.hpp"
 #include "scene/Component.hpp"
+
+#include <glm/vec2.hpp>
+#include <glm/vec4.hpp>
+
+#include <vector>
+#include <memory>
 
 namespace eng
 {
 
 class UIElementComponent;
+class Texture;
+class Mesh;
 
 class CanvasComponent : public Component {
     COMPONENT(CanvasComponent)
 public:
     void Update(float deltaTime) override;
+    void Init() override;
     void Render(UIElementComponent* element);
+    void BeginRendering();
+    void Flush();
+
+    void DrawRect(
+        const glm::vec2& lowerLeftPos, const glm::vec2& upperRightPos,
+        const glm::vec2& lowerLeftUV, const glm::vec2& upperRightUV,
+        Texture* texture, const glm::vec4& color
+    );
+
+private:
+    std::vector<UIBatch> m_batches;
+    std::vector<float> m_vertices;
+    std::vector<uint32_t> m_indices;
+    std::shared_ptr<Mesh> m_mesh;
+
+    void UpdateBatches(Texture* texture);
 };
 
 }

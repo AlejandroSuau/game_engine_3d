@@ -2,17 +2,90 @@
 
 #include "scene/components/ui/UIElementComponent.hpp"
 #include "scene/GameObject.hpp"
+#include "graphics/VertexLayout.hpp"
+#include "render/Mesh.hpp"
+#include "Engine.hpp"
 
 namespace eng
 {
 
+void CanvasComponent::Init() {
+    VertexLayout layout;
+    // Position
+    layout.elements.push_back({
+        VertexElement::PositionIndex,
+        2,
+        GL_FLOAT,
+        0
+    });
+
+    // Color
+    layout.elements.push_back({
+        VertexElement::ColorIndex,
+        4,
+        GL_FLOAT,
+        sizeof(float) * 2
+    });
+
+    // UV
+    layout.elements.push_back({
+        VertexElement::UVIndex,
+        2,
+        GL_FLOAT,
+        sizeof(float) * 6
+    });
+    layout.stride = sizeof(float) * 8;
+    m_mesh = std::make_shared<Mesh>(layout, m_vertices, m_indices);
+}
+
 void CanvasComponent::Update(float deltaTime) {
+    BeginRendering();
+
     const auto& children = m_owner->GetChildren();
     for (const auto& child : children) {
         if (auto comp = child->GetComponent<UIElementComponent>()) {
             Render(comp);
         }
     }
+
+    Flush();
+}
+
+void CanvasComponent::BeginRendering() {
+    m_vertices.clear();
+    m_indices.clear();
+    m_batches.clear();
+}
+
+void CanvasComponent::Flush() {
+    m_mesh->UpdateDynamic(m_vertices, m_indices);
+    auto& gfx = Engine::GetInstance().GetGraphicsAPI();
+    const auto& viewport = gfx.GetViewport();
+
+    RenderCommandUI command;
+    command.mesh = m_mesh.get();
+    command.shaderProgram = gfx.GetDefaultUIShaderProgram().get();
+    command.batches = m_batches;
+    command.screenWidth = viewport.width;
+    command.screenHeight = viewport.height;
+
+    Engine::GetInstance().GetRenderQueue().Submit(command);
+}
+
+void CanvasComponent::DrawRect(
+    const glm::vec2& p1, const glm::vec2& p2,
+    const glm::vec2& uv1, const glm::vec2& uv2,
+    Texture* texture, const glm::vec4& color) {
+
+    uint32_t base = static_cast<uint32_t>(m_vertices.size() / 8);
+    m_vertices.insert(m_vertices.end(), {
+        p2.x, p2.y, color.r, color.g, color.b, color.a, uv2.x, uv2.y,
+        p1.x, p2.y, color.r, color.g, color.b, color.a, uv1.x, uv2.y,
+        p1.x, p1.y, color.r, color.g, color.b, color.a, uv1.x, uv1.y,
+        p2.x, p1.y, color.r, color.g, color.b, color.a, uv2.x, uv1.y,
+    });
+    m_indices.insert(m_indices.end(), { base, base + 1, base + 2, base, base + 2, base + 3});
+    UpdateBatches(texture);
 }
 
 void CanvasComponent::Render(UIElementComponent* element) {
@@ -24,6 +97,14 @@ void CanvasComponent::Render(UIElementComponent* element) {
         if (auto comp = child->GetComponent<UIElementComponent>()) {
             Render(comp);
         }
+    }
+}
+
+void CanvasComponent::UpdateBatches(Texture* texture) {
+    if (m_batches.empty() || m_batches.back().texture != texture) {
+        m_batches.push_back({texture, 6});
+    } else {
+        m_batches.back().indexCount += 6;
     }
 }
 

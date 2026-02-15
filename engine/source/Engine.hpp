@@ -7,6 +7,7 @@
 #include "io/FileSystem.hpp"
 #include "physics/PhysicsManager.hpp"
 #include "audio/AudioManager.hpp"
+#include "font/FontManager.hpp"
 
 #include <memory>
 #include <chrono>
@@ -35,6 +36,7 @@ public:
     TextureManager& GetTextureManager();
     PhysicsManager& GetPhysicsManager();
     AudioManager& GetAudioManager();
+    FontManager& GetFontManager();
 
     void SetScene(Scene* scene);
     Scene* GetScene();
@@ -56,6 +58,7 @@ private:
     TextureManager m_textureManager;
     PhysicsManager m_physicsManager;
     AudioManager m_audioManager;
+    FontManager m_fontManager;
     std::unique_ptr<Scene> m_currentScene;
 };
 

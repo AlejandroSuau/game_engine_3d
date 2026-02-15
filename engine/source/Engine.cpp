@@ -46,6 +46,10 @@ void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
     inputManager.SetMousePositionChanged(true);
 }
 
+void windowSizeCallback(GLFWwindow* window, int width, int height) {
+    eng::Engine::GetInstance().GetGraphicsAPI().SetViewport(0, 0, width, height);
+}
+
 Engine& Engine::GetInstance() {
     static Engine instance;
     return instance;
@@ -82,6 +86,7 @@ bool Engine::Init(int width, int height) {
     glfwSetKeyCallback(m_window, keyCallback);
     glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
     glfwSetCursorPosCallback(m_window, cursorPositionCallback);
+    glfwSetWindowSizeCallback(m_window, windowSizeCallback);
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(m_window);
@@ -94,9 +99,11 @@ bool Engine::Init(int width, int height) {
     }
 
     m_graphicsAPI.Init();
+    m_graphicsAPI.SetViewport(0, 0, width, height);
     m_physicsManager.Init();
     m_audioManager.Init();
     m_renderQueue.Init();
+    m_fontManager.Init();
 
     return m_application->Init();
 }
@@ -196,6 +203,10 @@ PhysicsManager& Engine::GetPhysicsManager() {
 
 AudioManager& Engine::GetAudioManager() {
     return m_audioManager;
+}
+
+FontManager& Engine::GetFontManager() {
+    return m_fontManager;
 }
 
 void Engine::SetScene(Scene* scene) {

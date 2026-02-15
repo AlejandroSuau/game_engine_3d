@@ -25,6 +25,9 @@ public:
     void Bind();
     void Unbind();
     void Draw();
+    void DrawIndexedRange(uint32_t startIndex, uint32_t indexCount);
+    void UpdateDynamic(const std::vector<float>& vertices);
+    void UpdateDynamic(const std::vector<float>& vertices, const std::vector<uint32_t>& indices);
 
     static std::shared_ptr<Mesh> CreateBox(const glm::vec3& extents = glm::vec3(1.f));
     static std::shared_ptr<Mesh> CreateSphere(float radius, int sectors, int stacks);
