@@ -8,6 +8,7 @@
 #include "physics/PhysicsManager.hpp"
 #include "audio/AudioManager.hpp"
 #include "font/FontManager.hpp"
+#include "scene/components/ui/UIInputSystem.hpp"
 
 #include <memory>
 #include <chrono>
@@ -26,6 +27,7 @@ public:
     bool Init(int width, int height);
     void Run();
     void Destroy();
+    void SetCursorEnabled(bool enabled);
     
     void SetApplication(Application* app);
     Application* GetApplication();
@@ -37,6 +39,7 @@ public:
     PhysicsManager& GetPhysicsManager();
     AudioManager& GetAudioManager();
     FontManager& GetFontManager();
+    UIInputSystem& GetUIInputSystem();
 
     void SetScene(Scene* scene);
     Scene* GetScene();
@@ -59,6 +62,7 @@ private:
     PhysicsManager m_physicsManager;
     AudioManager m_audioManager;
     FontManager m_fontManager;
+    UIInputSystem m_uiInputSystem;
     std::unique_ptr<Scene> m_currentScene;
 };
 

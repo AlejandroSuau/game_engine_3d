@@ -12,6 +12,7 @@
 #include "scene/components/ui/UIElementComponent.hpp"
 #include "scene/components/ui/CanvasComponent.hpp"
 #include "scene/components/ui/TextComponent.hpp"
+#include "scene/components/ui/ButtonComponent.hpp"
 #include "Engine.hpp"
 
 namespace eng
@@ -30,6 +31,7 @@ void Scene::RegisterTypes() {
     UIElementComponent::Register();
     CanvasComponent::Register();
     TextComponent::Register();
+    ButtonComponent::Register();
 }
 
 void Scene::Update(float deltaTime) {

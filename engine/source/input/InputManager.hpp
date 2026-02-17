@@ -11,10 +11,16 @@ class InputManager {
 public:
 
     void SetKeyPressed(int key, bool pressed);
-    bool IsKeyPressed(int key);
+    bool IsKeyPressed(int key) const;
 
     void SetMouseButtonPressed(int button, bool pressed);
-    bool IsMouseButtonPressed(int button);
+    bool IsMouseButtonPressed(int button) const;
+
+    void SetMouseButtonWasPressed(int button, bool pressed);
+    bool WasMouseButtonPressed(int button) const;
+
+    void SetMouseButtonWasReleased(int button, bool pressed);
+    bool WasMouseButtonReleased(int button) const;
 
     void SetMousePositionOld(const glm::vec2& pos);
     const glm::vec2 GetMousePositionOld() const;
@@ -25,11 +31,15 @@ public:
     void SetMousePositionChanged(bool changed);
     bool IsMousePositionChanged() const;
 
+    void ClearStates();
+
 private:
     friend class Engine;
 
     std::array<bool, 256> m_keys {false};
     std::array<bool, 16> m_mouseKeys {false};
+    std::array<bool, 16> m_mouseKeyPressed {false};
+    std::array<bool, 16> m_mouseKeyReleased {false};
     glm::vec2 m_mousePositionOld {0.f};
     glm::vec2 m_mousePositionCurrent {0.f};
     bool m_mousePositionChanged {false};
@@ -40,8 +50,8 @@ private:
     InputManager& operator=(const InputManager&) = delete;
     InputManager& operator=(InputManager&&) = delete;
 
-    bool IsKeyValid(int key);
-    bool IsMouseButtonValid(int button);
+    bool IsKeyValid(int key) const;
+    bool IsMouseButtonValid(int button) const;
 };
 
 }

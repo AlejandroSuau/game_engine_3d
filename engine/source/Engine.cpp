@@ -31,8 +31,10 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     
     if (action == GLFW_PRESS) {
         inputManager.SetMouseButtonPressed(button, true);
+        inputManager.SetMouseButtonWasPressed(button, true);
     } else if (action == GLFW_RELEASE) {
         inputManager.SetMouseButtonPressed(button, false);
+        inputManager.SetMouseButtonWasReleased(button, true);
     }
 }
 
@@ -87,7 +89,6 @@ bool Engine::Init(int width, int height) {
     glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
     glfwSetCursorPosCallback(m_window, cursorPositionCallback);
     glfwSetWindowSizeCallback(m_window, windowSizeCallback);
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(m_window);
 
@@ -124,6 +125,10 @@ void Engine::Run() {
         m_lastTimePoint = now;
 
         m_physicsManager.Update(deltaTime);
+        
+        if (m_uiInputSystem.IsActive()) {
+            m_uiInputSystem.Update(deltaTime);
+        }
 
         m_application->Update(deltaTime);
 
@@ -156,7 +161,7 @@ void Engine::Run() {
 
         glfwSwapBuffers(m_window);
 
-        m_inputManager.SetMousePositionChanged(false);
+        m_inputManager.ClearStates();
     }
 }
 
@@ -167,6 +172,10 @@ void Engine::Destroy() {
         glfwTerminate();
         m_window = nullptr;
     }
+}
+
+void Engine::SetCursorEnabled(bool enabled) {
+    glfwSetInputMode(m_window, GLFW_CURSOR, enabled ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
 void Engine::SetApplication(Application* app) {
@@ -207,6 +216,10 @@ AudioManager& Engine::GetAudioManager() {
 
 FontManager& Engine::GetFontManager() {
     return m_fontManager;
+}
+
+UIInputSystem& Engine::GetUIInputSystem() {
+    return m_uiInputSystem;
 }
 
 void Engine::SetScene(Scene* scene) {

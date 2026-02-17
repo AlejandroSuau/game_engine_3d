@@ -24,6 +24,7 @@
 #include "scene/components/ui/UIElementComponent.hpp"
 #include "scene/components/ui/CanvasComponent.hpp"
 #include "scene/components/ui/TextComponent.hpp"
+#include "scene/components/ui/ButtonComponent.hpp"
 #include "io/FileSystem.hpp"
 #include "EngineCommon.hpp"
 #include "physics/PhysicsManager.hpp"

@@ -72,6 +72,17 @@ void CanvasComponent::Flush() {
     Engine::GetInstance().GetRenderQueue().Submit(command);
 }
 
+void CanvasComponent::CollectUI(UIElementComponent* element, std::vector<UIElementComponent*>& out) {
+    out.push_back(element);
+
+    const auto& children = element->GetOwner()->GetChildren();
+    for (const auto& child : children) {
+        if (auto component = child->GetComponent<UIElementComponent>()) {
+            CollectUI(component, out);
+        }
+    }
+}
+
 void CanvasComponent::DrawRect(
     const glm::vec2& p1, const glm::vec2& p2,
     const glm::vec2& uv1, const glm::vec2& uv2,
@@ -86,6 +97,21 @@ void CanvasComponent::DrawRect(
     });
     m_indices.insert(m_indices.end(), { base, base + 1, base + 2, base, base + 2, base + 3});
     UpdateBatches(texture);
+}
+
+void CanvasComponent::DrawRect(
+    const glm::vec2& p1, 
+    const glm::vec2& p2,
+    glm::vec4& color) {
+    uint32_t base = static_cast<uint32_t>(m_vertices.size() / 8);
+    m_vertices.insert(m_vertices.end(), {
+        p2.x, p2.y, color.r, color.g, color.b, color.a, 1.f, 1.f,
+        p1.x, p2.y, color.r, color.g, color.b, color.a, 0.f, 1.f,
+        p1.x, p1.y, color.r, color.g, color.b, color.a, 0.f, 0.f,
+        p2.x, p1.y, color.r, color.g, color.b, color.a, 1.f, 0.f,
+    });
+    m_indices.insert(m_indices.end(), { base, base + 1, base + 2, base, base + 2, base + 3});
+    UpdateBatches(nullptr);
 }
 
 void CanvasComponent::Render(UIElementComponent* element) {
