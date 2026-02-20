@@ -14,14 +14,12 @@ class UIElementComponent : public Component {
 public:
     virtual ~UIElementComponent() = default;
     virtual void Render(CanvasComponent* canvas);
-    virtual bool HitTest(const glm::vec2& pos) const;
+    virtual bool HitTest(const glm::vec2& pos);
     virtual void OnPointerEnter();
     virtual void OnPointerExit();
     virtual void OnPointerUp();
     virtual void OnPointerDown();
     virtual void OnClick();
-protected:
-    glm::vec2 m_pivot = glm::vec2(0.5f);
 };
 
 }

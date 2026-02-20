@@ -1,6 +1,8 @@
 #include "Game.hpp"
 #include <eng.hpp>
 
+#include <memory>
+
 int main() {
     Game* game = new Game();
     eng::Engine& engine = eng::Engine::GetInstance();
@@ -11,8 +13,5 @@ int main() {
     }
 
     engine.Destroy();
-
-    delete game;
-
     return 0;
 }

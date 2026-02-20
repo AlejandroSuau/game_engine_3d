@@ -65,6 +65,8 @@ set(PROJECT_SOURCE_FILES
     source/scene/components/ui/ButtonComponent.cpp
     source/scene/components/ui/UIInputSystem.hpp
     source/scene/components/ui/UIInputSystem.cpp
+    source/scene/components/ui/RectTransformComponent.hpp
+    source/scene/components/ui/RectTransformComponent.cpp
     source/io/FileSystem.hpp
     source/io/FileSystem.cpp
     source/physics/PhysicsManager.hpp

@@ -13,6 +13,7 @@
 #include "scene/components/ui/CanvasComponent.hpp"
 #include "scene/components/ui/TextComponent.hpp"
 #include "scene/components/ui/ButtonComponent.hpp"
+#include "scene/components/ui/RectTransformComponent.hpp"
 #include "Engine.hpp"
 
 namespace eng
@@ -32,6 +33,7 @@ void Scene::RegisterTypes() {
     CanvasComponent::Register();
     TextComponent::Register();
     ButtonComponent::Register();
+    RectTransformComponent::Register();
 }
 
 void Scene::Update(float deltaTime) {
@@ -198,6 +200,16 @@ bool Scene::SetParent(GameObject* obj, GameObject* parent) {
     return result;
 }
 
+GameObject* Scene::FindObjectByName(const std::string& name) {
+    for (auto& obj : m_objects) {
+        if (auto child = obj->FindChildByName(name)) {
+            return child;
+        }
+    }
+
+    return nullptr;
+}
+
 void Scene::SetMainCamera(GameObject* camera) {
     m_mainCamera = camera;
 }
@@ -238,6 +250,16 @@ std::shared_ptr<Scene> Scene::Load(const std::string& path) {
         for (const auto& child : result->m_objects) {
             if (auto object = child->FindChildByName(cameraObjName)) {
                 result->SetMainCamera(object);
+                break;
+            }
+        }
+    }
+
+    std::string activeCanvasName = json.value("activeCanvas", "");
+    for (auto& child : result->m_objects) {
+        if (auto canvasObject = child->FindChildByName(activeCanvasName)) {
+            if (auto component = canvasObject->GetComponent<CanvasComponent>()) {
+                Engine::GetInstance().GetUIInputSystem().SetCanvas(component);
                 break;
             }
         }

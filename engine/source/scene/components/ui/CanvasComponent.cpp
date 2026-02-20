@@ -1,6 +1,7 @@
 #include "scene/components/ui/CanvasComponent.hpp"
 
 #include "scene/components/ui/UIElementComponent.hpp"
+#include "scene/components/ui/RectTransformComponent.hpp"
 #include "scene/GameObject.hpp"
 #include "graphics/VertexLayout.hpp"
 #include "render/Mesh.hpp"
@@ -8,6 +9,11 @@
 
 namespace eng
 {
+
+void CanvasComponent::LoadProperties(const nlohmann::json& json) {
+    bool active = json.value("active", true);
+    SetActive(active);
+}
 
 void CanvasComponent::Init() {
     VertexLayout layout;
@@ -39,6 +45,17 @@ void CanvasComponent::Init() {
 }
 
 void CanvasComponent::Update(float deltaTime) {
+    if (!m_active) { return; }
+
+    if (auto rectTransform = GetOwner()->GetComponent<RectTransformComponent>()) {
+        auto& graphics = Engine::GetInstance().GetGraphicsAPI();
+        const auto& viewport = graphics.GetViewport();
+        rectTransform->SetSize(glm::vec2(
+            static_cast<float>(viewport.width),
+            static_cast<float>(viewport.height)));
+    }
+
+
     BeginRendering();
 
     const auto& children = m_owner->GetChildren();
@@ -124,6 +141,14 @@ void CanvasComponent::Render(UIElementComponent* element) {
             Render(comp);
         }
     }
+}
+
+void CanvasComponent::SetActive(bool active) {
+    m_active = active;
+}
+
+bool CanvasComponent::IsActive() const {
+    return m_active;
 }
 
 void CanvasComponent::UpdateBatches(Texture* texture) {

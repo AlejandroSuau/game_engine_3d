@@ -22,8 +22,12 @@ void UIInputSystem::SetCanvas(CanvasComponent* canvas) {
     m_activeCanvas = canvas;
 }
 
+CanvasComponent* UIInputSystem::GetCanvas() {
+    return m_activeCanvas;
+}
+
 void UIInputSystem::Update(float deltaTime) {
-    if (!m_active || !m_activeCanvas) { return; }
+    if (!m_active || !m_activeCanvas || !m_activeCanvas->IsActive()) { return; }
 
     auto& input = Engine::GetInstance().GetInputManager();
     bool mouseDown = input.IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT);

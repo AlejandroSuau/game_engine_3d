@@ -17,6 +17,12 @@ bool GraphicsAPI::Init() {
 std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(
     const std::string& vertexSource,
     const std::string& fragmentSource) {
+    ShaderKey key{vertexSource, fragmentSource};
+    auto it = m_shaderCache.find(key);
+    if (it != m_shaderCache.end()) {
+        return it->second;
+    }
+
     // Compile shaders
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     const char* vertexShaderCStr = vertexSource.c_str();
@@ -64,7 +70,10 @@ std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    return std::make_shared<ShaderProgram>(shaderProgramID);
+    auto shaderProgram = std::make_shared<ShaderProgram>(shaderProgramID);
+    m_shaderCache.emplace(key, shaderProgram);
+
+    return shaderProgram;
 }
 
 void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram) {

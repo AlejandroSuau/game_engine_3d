@@ -41,8 +41,8 @@ public:
     FontManager& GetFontManager();
     UIInputSystem& GetUIInputSystem();
 
-    void SetScene(Scene* scene);
-    Scene* GetScene();
+    void SetScene(const std::shared_ptr<Scene>& scene);
+    const std::shared_ptr<Scene>& GetScene();
 
 private:
     Engine() = default;
@@ -63,7 +63,7 @@ private:
     AudioManager m_audioManager;
     FontManager m_fontManager;
     UIInputSystem m_uiInputSystem;
-    std::unique_ptr<Scene> m_currentScene;
+    std::shared_ptr<Scene> m_currentScene;
 };
 
 }

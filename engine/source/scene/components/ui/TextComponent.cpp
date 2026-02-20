@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "font/Font.hpp"
 #include "scene/components/ui/CanvasComponent.hpp"
+#include "scene/components/ui/RectTransformComponent.hpp"
 #include "scene/GameObject.hpp"
 
 #include <string>
@@ -46,9 +47,9 @@ void TextComponent::Render(CanvasComponent* canvas) {
         const auto& desc = m_font->GetGlyphDescription(c);
 
         float x1 = static_cast<float>(xOrigin);
-        float y1 = static_cast<float>(yOrigin);
-        float x2 = static_cast<float>(xOrigin + desc.width);
-        float y2 = static_cast<float>(yOrigin + desc.height);
+        float y1 = static_cast<float>(yOrigin - desc.height + desc.yOffset);
+        float x2 = x1 + static_cast<float>(desc.width);
+        float y2 = y1 + static_cast<float>(desc.height);
 
         float u1 = static_cast<float>(desc.x0) / static_cast<float>(width);
         float v1 = static_cast<float>(desc.y0) / static_cast<float>(height);
@@ -95,8 +96,9 @@ void TextComponent::SetFont(const std::string& path, int size) {
     m_font = Engine::GetInstance().GetFontManager().GetFont(path, size);
 }
 
-glm::vec2 TextComponent::GetPivotPos() const {
-    auto pos = m_owner->GetWorldPosition2D();
+glm::vec2 TextComponent::GetPivotPos() {
+    auto rectTransform = GetOwner()->GetComponent<RectTransformComponent>();
+    auto pos = rectTransform ? rectTransform->GetScreenPosition() : GetOwner()->GetWorldPosition2D();
     
     glm::vec2 rect(0.f);
     for (const auto c : m_text) {
@@ -105,9 +107,11 @@ glm::vec2 TextComponent::GetPivotPos() const {
         rect.y = std::max(rect.y, static_cast<float>(d.height));
     }
 
-    pos.x -= std::round(rect.x * m_pivot.x);
-    pos.y -= std::round(rect.y * m_pivot.y);
-    return pos;
+    if (rectTransform) {
+        pos -= rect * rectTransform->GetPivot();
+    }
+    
+    return { std::round(pos.x), std::round(pos.y)};
 }
 
 }

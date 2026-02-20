@@ -13,6 +13,7 @@ public:
     void SetActive(bool active);
     bool IsActive() const;
     void SetCanvas(CanvasComponent* canvas);
+    CanvasComponent* GetCanvas();
     void Update(float deltaTime);
 
     std::vector<UIElementComponent*> CollectUI(CanvasComponent* canvas);

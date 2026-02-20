@@ -75,7 +75,6 @@ bool Engine::Init(int width, int height) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     // Create window
     m_window = glfwCreateWindow(width, height, "Engine3D", nullptr, nullptr);
@@ -132,7 +131,6 @@ void Engine::Run() {
 
         m_application->Update(deltaTime);
 
-        m_graphicsAPI.SetClearColor(1.f, 1.f, 1.f, 1.f);
         m_graphicsAPI.ClearBuffers();
 
         CameraData cameraData;
@@ -163,6 +161,8 @@ void Engine::Run() {
 
         m_inputManager.ClearStates();
     }
+
+    m_application.reset(nullptr);
 }
 
 void Engine::Destroy() {
@@ -222,12 +222,12 @@ UIInputSystem& Engine::GetUIInputSystem() {
     return m_uiInputSystem;
 }
 
-void Engine::SetScene(Scene* scene) {
-    m_currentScene.reset(scene);
+void Engine::SetScene(const std::shared_ptr<Scene>& scene) {
+    m_currentScene = scene;
 }
 
-Scene* Engine::GetScene() {
-    return m_currentScene.get();
+const std::shared_ptr<Scene>& Engine::GetScene() {
+    return m_currentScene;
 }
 
 }

@@ -19,6 +19,7 @@ class Mesh;
 class CanvasComponent : public Component {
     COMPONENT(CanvasComponent)
 public:
+    void LoadProperties(const nlohmann::json& json);
     void Update(float deltaTime) override;
     void Init() override;
     void Render(UIElementComponent* element);
@@ -38,11 +39,15 @@ public:
         glm::vec4& color
     );
 
+    void SetActive(bool active);
+    bool IsActive() const;
+
 private:
     std::vector<UIBatch> m_batches;
     std::vector<float> m_vertices;
     std::vector<uint32_t> m_indices;
     std::shared_ptr<Mesh> m_mesh;
+    bool m_active = true;
 
     void UpdateBatches(Texture* texture);
 };
